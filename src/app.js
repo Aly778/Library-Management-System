@@ -48,6 +48,10 @@ app.get('/checkout', (req, res) => {
   res.render('checkout');
 });
 
+app.get('/history', (req, res) => {
+  res.render('history');
+});
+
 // API Routes
 app.get('/api', (req, res) => {
   res.json({ message: 'Welcome to the Library Management System API' });
