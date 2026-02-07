@@ -24,6 +24,10 @@ app.get('/login', (req, res) => {
   res.render('login');
 });
 
+app.get('/signup', (req, res) => {
+  res.render('signup');
+});
+
 // API Routes
 app.get('/api', (req, res) => {
   res.json({ message: 'Welcome to the Library Management System API' });
