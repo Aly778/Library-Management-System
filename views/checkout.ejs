@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <%- include('partials/head', { title: 'Checkout' }) %>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display min-h-screen flex flex-col">
+
+  <!-- Checkout Header -->
+  <header class="sticky top-0 z-50 flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-[#282e39] bg-white dark:bg-[#111318] px-10 py-4 shadow-sm">
+    <div class="flex items-center gap-4 text-slate-900 dark:text-white">
+      <div class="size-6 text-primary">
+        <svg fill="currentColor" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+          <path d="M39.5563 34.1455V13.8546C39.5563 15.708 36.8773 17.3437 32.7927 18.3189C30.2914 18.916 27.263 19.2655 24 19.2655C20.737 19.2655 17.7086 18.916 15.2073 18.3189C11.1227 17.3437 8.44365 15.708 8.44365 13.8546V34.1455C8.44365 35.9988 11.1227 37.6346 15.2073 38.6098C17.7086 39.2069 20.737 39.5564 24 39.5564C27.263 39.5564 30.2914 39.2069 32.7927 38.6098C36.8773 37.6346 39.5563 35.9988 39.5563 34.1455Z" fill="currentColor"></path>
+          <path clip-rule="evenodd" d="M10.4485 13.8519C10.4749 13.9271 10.6203 14.246 11.379 14.7361C12.298 15.3298 13.7492 15.9145 15.6717 16.3735C18.0007 16.9296 20.8712 17.2655 24 17.2655C27.1288 17.2655 29.9993 16.9296 32.3283 16.3735C34.2508 15.9145 35.702 15.3298 36.621 14.7361C37.3796 14.246 37.5251 13.9271 37.5515 13.8519C37.5287 13.7876 37.4333 13.5973 37.0635 13.2931C36.5266 12.8516 35.6288 12.3647 34.343 11.9175C31.79 11.0295 28.1333 10.4437 24 10.4437C19.8667 10.4437 16.2099 11.0295 13.657 11.9175C12.3712 12.3647 11.4734 12.8516 10.9365 13.2931C10.5667 13.5973 10.4713 13.7876 10.4485 13.8519ZM37.5563 18.7877C36.3176 19.3925 34.8502 19.8839 33.2571 20.2642C30.5836 20.9025 27.3973 21.2655 24 21.2655C20.6027 21.2655 17.4164 20.9025 14.7429 20.2642C13.1498 19.8839 11.6824 19.3925 10.4436 18.7877V34.1275C10.4515 34.1545 10.5427 34.4867 11.379 35.027C12.298 35.6207 13.7492 36.2054 15.6717 36.6644C18.0007 37.2205 20.8712 37.5564 24 37.5564C27.1288 37.5564 29.9993 37.2205 32.3283 36.6644C34.2508 36.2054 35.702 35.6207 36.621 35.027C37.4573 34.4867 37.5485 34.1546 37.5563 34.1275V18.7877ZM41.5563 13.8546V34.1455C41.5563 36.1078 40.158 37.5042 38.7915 38.3869C37.3498 39.3182 35.4192 40.0389 33.2571 40.5551C30.5836 41.1934 27.3973 41.5564 24 41.5564C20.6027 41.5564 17.4164 41.1934 14.7429 40.5551C12.5808 40.0389 10.6502 39.3182 9.20848 38.3869C7.84205 37.5042 6.44365 36.1078 6.44365 34.1455L6.44365 13.8546C6.44365 12.2684 7.37223 11.0454 8.39581 10.2036C9.43325 9.3505 10.8137 8.67141 12.343 8.13948C15.4203 7.06909 19.5418 6.44366 24 6.44366C28.4582 6.44366 32.5797 7.06909 35.657 8.13948C37.1863 8.67141 38.5667 9.3505 39.6042 10.2036C40.6278 11.0454 41.5563 12.2684 41.5563 13.8546Z" fill="currentColor" fill-rule="evenodd"></path>
+        </svg>
+      </div>
+      <h2 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">Book Marketplace</h2>
+    </div>
+    <div class="flex items-center gap-3">
+      <span class="hidden sm:flex text-slate-500 dark:text-[#9da6b9] text-sm font-medium">Need help?</span>
+      <div class="flex items-center justify-center overflow-hidden rounded-lg bg-green-500/10 dark:bg-green-500/20 px-3 py-1.5 border border-green-500/20 dark:border-green-500/30">
+        <span class="material-symbols-outlined text-green-600 dark:text-green-400 text-[18px] mr-2">lock</span>
+        <span class="text-green-700 dark:text-green-300 text-xs font-bold uppercase tracking-wider">Secure Checkout</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-grow flex justify-center w-full px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+    <div class="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+
+      <!-- Left: Payment Form -->
+      <div class="lg:col-span-7 xl:col-span-8 flex flex-col gap-8">
+        <div>
+          <h1 class="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white mb-2 tracking-tight">Checkout</h1>
+          <p class="text-slate-500 dark:text-[#9da6b9]">Complete your purchase securely to access your digital collection.</p>
+        </div>
+
+        <!-- Payment Method Section -->
+        <section class="bg-white dark:bg-[#1c1f27] rounded-xl p-6 border border-slate-200 dark:border-[#282e39] shadow-sm relative overflow-hidden">
+          <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center gap-3">
+              <span class="flex items-center justify-center size-8 rounded-full bg-primary/10 text-primary font-bold text-sm">1</span>
+              <h2 class="text-lg font-bold text-slate-900 dark:text-white">Payment Method</h2>
+            </div>
+            <div class="flex gap-2 opacity-60 grayscale hover:grayscale-0 transition-all">
+              <div class="h-6 w-10 bg-slate-100 dark:bg-slate-700 rounded flex items-center justify-center overflow-hidden" title="Visa">
+                <div class="w-full h-full bg-blue-900/20 dark:bg-blue-500/20 flex items-center justify-center">
+                  <span class="text-[8px] font-bold text-blue-800 dark:text-blue-300">VISA</span>
+                </div>
+              </div>
+              <div class="h-6 w-10 bg-slate-100 dark:bg-slate-700 rounded flex items-center justify-center overflow-hidden" title="Mastercard">
+                <div class="flex -space-x-1.5">
+                  <div class="size-3.5 rounded-full bg-red-500/80"></div>
+                  <div class="size-3.5 rounded-full bg-yellow-500/80"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="space-y-5">
+            <label class="flex flex-col gap-1.5">
+              <span class="text-sm font-medium text-slate-700 dark:text-[#9da6b9]">Cardholder Name</span>
+              <input class="w-full rounded-lg bg-slate-50 dark:bg-[#101622] border border-slate-200 dark:border-[#3b4354] text-slate-900 dark:text-white px-4 py-3 text-sm focus:ring-2 focus:ring-primary focus:border-transparent placeholder:text-slate-400 dark:placeholder:text-slate-600 transition-colors" placeholder="Name as on card" type="text"/>
+            </label>
+
+            <label class="flex flex-col gap-1.5 relative">
+              <span class="text-sm font-medium text-slate-700 dark:text-[#9da6b9]">Card Number</span>
+              <div class="relative">
+                <span class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400 dark:text-slate-500">credit_card</span>
+                <input class="w-full rounded-lg bg-slate-50 dark:bg-[#101622] border border-slate-200 dark:border-[#3b4354] text-slate-900 dark:text-white pl-11 pr-4 py-3 text-sm focus:ring-2 focus:ring-primary focus:border-transparent placeholder:text-slate-400 dark:placeholder:text-slate-600 transition-colors" placeholder="0000 0000 0000 0000" type="text"/>
+              </div>
+            </label>
+
+            <div class="grid grid-cols-2 gap-4">
+              <label class="flex flex-col gap-1.5">
+                <span class="text-sm font-medium text-slate-700 dark:text-[#9da6b9]">Expiration Date</span>
+                <input class="w-full rounded-lg bg-slate-50 dark:bg-[#101622] border border-slate-200 dark:border-[#3b4354] text-slate-900 dark:text-white px-4 py-3 text-sm focus:ring-2 focus:ring-primary focus:border-transparent placeholder:text-slate-400 dark:placeholder:text-slate-600 transition-colors" placeholder="MM / YY" type="text"/>
+              </label>
+              <label class="flex flex-col gap-1.5">
+                <div class="flex items-center justify-between">
+                  <span class="text-sm font-medium text-slate-700 dark:text-[#9da6b9]">CVV / CVC</span>
+                  <span class="material-symbols-outlined text-[16px] text-slate-400 cursor-help" title="3 digits on back of card">help</span>
+                </div>
+                <input class="w-full rounded-lg bg-slate-50 dark:bg-[#101622] border border-slate-200 dark:border-[#3b4354] text-slate-900 dark:text-white px-4 py-3 text-sm focus:ring-2 focus:ring-primary focus:border-transparent placeholder:text-slate-400 dark:placeholder:text-slate-600 transition-colors" placeholder="123" type="text"/>
+              </label>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Right: Order Summary -->
+      <div class="lg:col-span-5 xl:col-span-4 flex flex-col gap-6">
+        <div class="sticky top-24">
+          <div class="bg-white dark:bg-[#1e232e] rounded-xl border border-slate-200 dark:border-[#282e39] shadow-lg overflow-hidden flex flex-col">
+            <!-- Summary Header -->
+            <div class="p-6 border-b border-slate-100 dark:border-[#282e39] bg-slate-50/50 dark:bg-[#1c1f27]/50">
+              <h2 class="text-lg font-bold text-slate-900 dark:text-white">Order Summary</h2>
+              <p class="text-sm text-slate-500 dark:text-[#9da6b9] mt-1">2 items in cart</p>
+            </div>
+
+            <!-- Cart Items -->
+            <div class="p-6 flex flex-col gap-6 max-h-[400px] overflow-y-auto">
+              <!-- Item: The Great Gatsby -->
+              <div class="flex gap-4">
+                <div class="h-20 w-16 flex-shrink-0 overflow-hidden rounded-md border border-slate-200 dark:border-[#3b4354] bg-slate-100 dark:bg-[#101622] relative">
+                  <div class="absolute inset-0 bg-gradient-to-br from-indigo-500 to-purple-600"></div>
+                </div>
+                <div class="flex flex-1 flex-col justify-between py-1">
+                  <div>
+                    <h3 class="font-bold text-slate-900 dark:text-white text-sm line-clamp-2">The Great Gatsby</h3>
+                    <p class="text-xs text-slate-500 dark:text-[#9da6b9] mt-1">F. Scott Fitzgerald</p>
+                  </div>
+                  <p class="text-sm font-semibold text-slate-900 dark:text-white">$12.00</p>
+                </div>
+              </div>
+
+              <!-- Item: 1984 -->
+              <div class="flex gap-4">
+                <div class="h-20 w-16 flex-shrink-0 overflow-hidden rounded-md border border-slate-200 dark:border-[#3b4354] bg-slate-100 dark:bg-[#101622] relative">
+                  <div class="absolute inset-0 bg-gradient-to-tr from-orange-600 to-red-600"></div>
+                </div>
+                <div class="flex flex-1 flex-col justify-between py-1">
+                  <div>
+                    <h3 class="font-bold text-slate-900 dark:text-white text-sm line-clamp-2">1984</h3>
+                    <p class="text-xs text-slate-500 dark:text-[#9da6b9] mt-1">George Orwell</p>
+                  </div>
+                  <p class="text-sm font-semibold text-slate-900 dark:text-white">$15.50</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="h-px bg-slate-100 dark:bg-[#282e39] mx-6"></div>
+
+            <!-- Pricing Breakdown -->
+            <div class="p-6 flex flex-col gap-3">
+              <div class="flex justify-between text-sm text-slate-600 dark:text-[#9da6b9]">
+                <span>Subtotal</span>
+                <span class="font-medium text-slate-900 dark:text-white">$27.50</span>
+              </div>
+              <div class="flex justify-between text-sm text-slate-600 dark:text-[#9da6b9]">
+                <span>Taxes</span>
+                <span class="font-medium text-slate-900 dark:text-white">$0.00</span>
+              </div>
+              <div class="h-px bg-slate-100 dark:bg-[#282e39] my-2"></div>
+              <div class="flex justify-between items-center">
+                <span class="text-base font-bold text-slate-900 dark:text-white">Total</span>
+                <span class="text-xl font-black text-slate-900 dark:text-white">$27.50</span>
+              </div>
+            </div>
+
+            <!-- Pay Button -->
+            <div class="p-6 pt-0">
+              <button class="w-full group relative flex items-center justify-center gap-2 overflow-hidden rounded-lg bg-primary hover:bg-blue-600 text-white font-bold py-3.5 px-4 transition-all duration-200 shadow-lg shadow-blue-900/20 active:scale-[0.98]">
+                <span class="material-symbols-outlined text-[20px] group-hover:scale-110 transition-transform">lock</span>
+                <span>Pay $27.50</span>
+              </button>
+              <div class="mt-4 flex items-center justify-center gap-2 text-xs text-slate-400 dark:text-slate-600">
+                <span class="material-symbols-outlined text-[14px]">shield</span>
+                <span>Payments are secure and encrypted</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+</body>
+</html>
