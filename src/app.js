@@ -28,6 +28,10 @@ app.get('/signup', (req, res) => {
   res.render('signup');
 });
 
+app.get('/catalog', (req, res) => {
+  res.render('catalog');
+});
+
 // API Routes
 app.get('/api', (req, res) => {
   res.json({ message: 'Welcome to the Library Management System API' });
