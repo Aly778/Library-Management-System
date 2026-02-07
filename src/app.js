@@ -40,6 +40,10 @@ app.get('/inventory', (req, res) => {
   res.render('inventory');
 });
 
+app.get('/dashboard', (req, res) => {
+  res.render('dashboard');
+});
+
 // API Routes
 app.get('/api', (req, res) => {
   res.json({ message: 'Welcome to the Library Management System API' });

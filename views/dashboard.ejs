@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html class="light dark" lang="en">
+<head>
+  <%- include('partials/head', { title: 'Admin Dashboard' }) %>
+  <style>
+    :root {
+      --primary-dashboard: #1e3a8a;
+    }
+  </style>
+</head>
+<body class="bg-[#fdfbf7] dark:bg-[#0f172a] font-display text-[#1e293b] dark:text-[#f8fafc] antialiased overflow-hidden">
+
+  <div class="flex h-screen w-full overflow-hidden">
+
+    <!-- Dashboard Sidebar -->
+    <%- include('partials/sidebar-dashboard') %>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col h-full overflow-hidden relative">
+      <!-- Top Bar -->
+      <header class="h-16 flex items-center justify-between px-6 border-b border-[#e2e8f0] dark:border-[#334155] bg-white dark:bg-[#1e293b] shrink-0">
+        <div class="flex items-center gap-4">
+          <button class="lg:hidden p-2 -ml-2 text-[#64748b] dark:text-[#94a3b8]">
+            <span class="material-symbols-outlined">menu</span>
+          </button>
+          <h2 class="text-xl font-bold text-[#1e293b] dark:text-[#f8fafc]">Dashboard Overview</h2>
+        </div>
+        <div class="flex items-center gap-4">
+          <button class="flex items-center gap-2 bg-[#1e3a8a] hover:bg-blue-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
+            <span class="material-symbols-outlined text-[20px]">add</span>
+            <span class="hidden sm:inline">Add Book</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Scrollable Content -->
+      <div class="flex-1 overflow-y-auto bg-[#fdfbf7] dark:bg-[#0f172a] p-6">
+        <div class="max-w-7xl mx-auto flex flex-col gap-6">
+
+          <!-- Greeting -->
+          <div class="flex flex-col gap-1">
+            <h3 class="text-2xl font-bold text-[#1e293b] dark:text-[#f8fafc]">Good Morning, Eleanor!</h3>
+            <p class="text-[#64748b] dark:text-[#94a3b8]">Here's what's happening in the library today.</p>
+          </div>
+
+          <!-- Stats Cards -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- Total Books -->
+            <div class="bg-white dark:bg-[#1e293b] p-5 rounded-xl border border-[#e2e8f0] dark:border-[#334155] shadow-sm">
+              <div class="flex justify-between items-start mb-4">
+                <div class="p-2 bg-blue-50 dark:bg-blue-900/30 rounded-lg text-[#1e3a8a] dark:text-blue-400">
+                  <span class="material-symbols-outlined">library_books</span>
+                </div>
+                <span class="flex items-center gap-1 text-xs font-medium text-green-600 bg-green-50 dark:bg-green-900/20 px-2 py-1 rounded-full">
+                  <span class="material-symbols-outlined text-[14px]">trending_up</span> +5.2%
+                </span>
+              </div>
+              <h4 class="text-[#64748b] dark:text-[#94a3b8] text-sm font-medium mb-1">Total Books</h4>
+              <p class="text-2xl font-bold text-[#1e293b] dark:text-[#f8fafc]">12,450</p>
+            </div>
+
+            <!-- Total Customers -->
+            <div class="bg-white dark:bg-[#1e293b] p-5 rounded-xl border border-[#e2e8f0] dark:border-[#334155] shadow-sm">
+              <div class="flex justify-between items-start mb-4">
+                <div class="p-2 bg-amber-50 dark:bg-amber-900/30 rounded-lg text-amber-600 dark:text-amber-400">
+                  <span class="material-symbols-outlined">group</span>
+                </div>
+                <span class="flex items-center gap-1 text-xs font-medium text-green-600 bg-green-50 dark:bg-green-900/20 px-2 py-1 rounded-full">
+                  <span class="material-symbols-outlined text-[14px]">trending_up</span> +12%
+                </span>
+              </div>
+              <h4 class="text-[#64748b] dark:text-[#94a3b8] text-sm font-medium mb-1">Total Customers</h4>
+              <p class="text-2xl font-bold text-[#1e293b] dark:text-[#f8fafc]">3,200</p>
+            </div>
+
+            <!-- Books Sold -->
+            <div class="bg-white dark:bg-[#1e293b] p-5 rounded-xl border border-[#e2e8f0] dark:border-[#334155] shadow-sm">
+              <div class="flex justify-between items-start mb-4">
+                <div class="p-2 bg-emerald-50 dark:bg-emerald-900/30 rounded-lg text-emerald-600 dark:text-emerald-400">
+                  <span class="material-symbols-outlined">shopping_cart</span>
+                </div>
+                <span class="flex items-center gap-1 text-xs font-medium text-green-600 bg-green-50 dark:bg-green-900/20 px-2 py-1 rounded-full">
+                  <span class="material-symbols-outlined text-[14px]">trending_up</span> +8.4%
+                </span>
+              </div>
+              <h4 class="text-[#64748b] dark:text-[#94a3b8] text-sm font-medium mb-1">Books Sold</h4>
+              <p class="text-2xl font-bold text-[#1e293b] dark:text-[#f8fafc]">1,840</p>
+            </div>
+          </div>
+
+          <!-- Personnel Management -->
+          <div class="bg-white dark:bg-[#1e293b] p-6 rounded-xl border border-[#e2e8f0] dark:border-[#334155] shadow-sm">
+            <div class="mb-6">
+              <h3 class="text-lg font-bold text-[#1e293b] dark:text-[#f8fafc]">Personnel Management</h3>
+              <p class="text-sm text-[#64748b] dark:text-[#94a3b8]">Admin controls for staff and patrons</p>
+            </div>
+            <div class="flex flex-wrap gap-4">
+              <button class="flex items-center gap-2 bg-[#1e3a8a] hover:bg-blue-800 text-white px-6 py-3 rounded-lg text-sm font-semibold transition-colors shadow-sm">
+                <span class="material-symbols-outlined text-[20px]">person_add</span>
+                Add New Staff Member
+              </button>
+              <button class="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg text-sm font-semibold transition-colors shadow-sm">
+                <span class="material-symbols-outlined text-[20px]">person_remove</span>
+                Remove Staff Member
+              </button>
+              <button class="flex items-center gap-2 border border-[#e2e8f0] dark:border-[#334155] hover:bg-slate-100 dark:hover:bg-slate-800 text-[#1e293b] dark:text-[#f8fafc] px-6 py-3 rounded-lg text-sm font-semibold transition-colors">
+                <span class="material-symbols-outlined text-[20px]">visibility</span>
+                View All Library Users
+              </button>
+            </div>
+          </div>
+
+          <!-- Financial Overview -->
+          <div class="bg-white dark:bg-[#1e293b] rounded-xl border border-[#e2e8f0] dark:border-[#334155] shadow-sm flex flex-col overflow-hidden">
+            <div class="p-5 border-b border-[#e2e8f0] dark:border-[#334155] flex justify-between items-center">
+              <h3 class="text-lg font-bold text-[#1e293b] dark:text-[#f8fafc]">Financial Overview</h3>
+              <div class="flex gap-2">
+                <button class="text-sm text-[#64748b] dark:text-[#94a3b8] hover:text-[#1e3a8a] dark:hover:text-[#3b82f6] flex items-center gap-1 bg-[#fdfbf7] dark:bg-[#0f172a] px-3 py-1 rounded border border-[#e2e8f0] dark:border-[#334155]">
+                  This Month <span class="material-symbols-outlined text-[16px]">expand_more</span>
+                </button>
+              </div>
+            </div>
+            <div class="p-6">
+              <div class="w-full overflow-x-auto">
+                <table class="w-full text-left text-sm text-[#64748b] dark:text-[#94a3b8]">
+                  <thead class="bg-[#fdfbf7] dark:bg-slate-800/50 text-xs uppercase font-semibold text-[#1e293b] dark:text-[#f8fafc]">
+                    <tr>
+                      <th class="px-5 py-3 rounded-tl-lg">Transaction ID</th>
+                      <th class="px-5 py-3">Customer</th>
+                      <th class="px-5 py-3">Date</th>
+                      <th class="px-5 py-3">Items</th>
+                      <th class="px-5 py-3 text-right">Amount</th>
+                      <th class="px-5 py-3 text-right rounded-tr-lg">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-[#e2e8f0] dark:divide-[#334155]">
+                    <tr class="hover:bg-[#fdfbf7] dark:hover:bg-slate-800/30 transition-colors">
+                      <td class="px-5 py-3 font-medium text-[#1e293b] dark:text-[#f8fafc]">#TR-8842</td>
+                      <td class="px-5 py-3">James Smith</td>
+                      <td class="px-5 py-3">Oct 24, 2023</td>
+                      <td class="px-5 py-3">The Great Gatsby (Hardcover)</td>
+                      <td class="px-5 py-3 text-right font-semibold text-[#1e293b] dark:text-[#f8fafc]">$24.99</td>
+                      <td class="px-5 py-3 text-right">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">Completed</span>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-[#fdfbf7] dark:hover:bg-slate-800/30 transition-colors">
+                      <td class="px-5 py-3 font-medium text-[#1e293b] dark:text-[#f8fafc]">#TR-8841</td>
+                      <td class="px-5 py-3">Linda Ray</td>
+                      <td class="px-5 py-3">Oct 24, 2023</td>
+                      <td class="px-5 py-3">Data Science 101</td>
+                      <td class="px-5 py-3 text-right font-semibold text-[#1e293b] dark:text-[#f8fafc]">$45.00</td>
+                      <td class="px-5 py-3 text-right">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">Completed</span>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-[#fdfbf7] dark:hover:bg-slate-800/30 transition-colors">
+                      <td class="px-5 py-3 font-medium text-[#1e293b] dark:text-[#f8fafc]">#TR-8840</td>
+                      <td class="px-5 py-3">Robert Fox</td>
+                      <td class="px-5 py-3">Oct 23, 2023</td>
+                      <td class="px-5 py-3">The Alchemist, Design Patterns</td>
+                      <td class="px-5 py-3 text-right font-semibold text-[#1e293b] dark:text-[#f8fafc]">$62.50</td>
+                      <td class="px-5 py-3 text-right">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400">Pending</span>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-[#fdfbf7] dark:hover:bg-slate-800/30 transition-colors">
+                      <td class="px-5 py-3 font-medium text-[#1e293b] dark:text-[#f8fafc]">#TR-8839</td>
+                      <td class="px-5 py-3">Jenny Wilson</td>
+                      <td class="px-5 py-3">Oct 23, 2023</td>
+                      <td class="px-5 py-3">Clean Code</td>
+                      <td class="px-5 py-3 text-right font-semibold text-[#1e293b] dark:text-[#f8fafc]">$38.00</td>
+                      <td class="px-5 py-3 text-right">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">Completed</span>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-[#fdfbf7] dark:hover:bg-slate-800/30 transition-colors">
+                      <td class="px-5 py-3 font-medium text-[#1e293b] dark:text-[#f8fafc]">#TR-8838</td>
+                      <td class="px-5 py-3">Albert Flores</td>
+                      <td class="px-5 py-3">Oct 22, 2023</td>
+                      <td class="px-5 py-3">Introduction to Algorithms</td>
+                      <td class="px-5 py-3 text-right font-semibold text-[#1e293b] dark:text-[#f8fafc]">$85.00</td>
+                      <td class="px-5 py-3 text-right">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400">Failed</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </main>
+  </div>
+
+</body>
+</html>
