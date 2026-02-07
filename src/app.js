@@ -32,6 +32,14 @@ app.get('/catalog', (req, res) => {
   res.render('catalog');
 });
 
+app.get('/cart', (req, res) => {
+  res.render('cart');
+});
+
+app.get('/inventory', (req, res) => {
+  res.render('inventory');
+});
+
 // API Routes
 app.get('/api', (req, res) => {
   res.json({ message: 'Welcome to the Library Management System API' });
