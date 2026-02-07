@@ -14,7 +14,7 @@
     <header class="h-16 bg-white dark:bg-[#1a2230] border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-8 flex-shrink-0 z-10">
       <h1 class="text-xl font-bold text-slate-900 dark:text-white">Inventory Management</h1>
       <div class="flex items-center gap-4">
-        <button class="flex items-center gap-2 px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-blue-600 active:bg-blue-700 transition-colors">
+        <button onclick="openAddBookModal()" class="flex items-center gap-2 px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-blue-600 active:bg-blue-700 transition-colors">
           <span class="material-symbols-outlined text-[18px]">add</span>
           Add New Book
         </button>
@@ -339,6 +339,71 @@
       </div>
     </main>
   </div>
+
+  <!-- Add Book Modal -->
+  <%- include('partials/modal-add-book') %>
+
+  <script>
+    // Modal open/close
+    function openAddBookModal() {
+      document.getElementById('add-book-modal').classList.remove('hidden');
+    }
+
+    function closeAddBookModal() {
+      document.getElementById('add-book-modal').classList.add('hidden');
+    }
+
+    // Close modal on backdrop click
+    document.getElementById('add-book-modal').addEventListener('click', function(e) {
+      if (e.target === this) closeAddBookModal();
+    });
+
+    // Close modal on Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeAddBookModal();
+    });
+
+    // Sub-category dropdown logic
+    function updateSubCategories() {
+      const mainCategory = document.getElementById('main-category').value;
+      const subCategorySelect = document.getElementById('sub-category');
+      subCategorySelect.innerHTML = '<option disabled selected value="">Select a sub-category</option>';
+      const categories = {
+        'fiction': [
+          { value: 'psych-thrillers', text: 'Psychological Thrillers' },
+          { value: 'historical', text: 'Historical Fiction' },
+          { value: 'dystopian', text: 'Dystopian & Sci-Fi' },
+          { value: 'mystery', text: 'Mystery & Crime' }
+        ],
+        'science': [
+          { value: 'cs', text: 'Computer Science' },
+          { value: 'math', text: 'Mathematics' },
+          { value: 'medicine', text: 'Medicine' }
+        ],
+        'humanities': [
+          { value: 'psychology', text: 'Mental Health & Psychology' },
+          { value: 'ya', text: 'YA Fiction & Tragedy' },
+          { value: 'biographies', text: 'Biographies & Memoirs' }
+        ],
+        'education': [
+          { value: 'language', text: 'Language Learning' },
+          { value: 'academic', text: 'Academic References' },
+          { value: 'textbooks', text: 'University Textbooks' }
+        ]
+      };
+      if (categories[mainCategory]) {
+        categories[mainCategory].forEach(sub => {
+          const option = document.createElement('option');
+          option.value = sub.value;
+          option.textContent = sub.text;
+          subCategorySelect.appendChild(option);
+        });
+        subCategorySelect.disabled = false;
+      } else {
+        subCategorySelect.disabled = true;
+      }
+    }
+  </script>
 
 </body>
 </html>
