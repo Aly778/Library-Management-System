@@ -87,7 +87,7 @@
                     </div>
                   </td>
                   <td class="py-4 px-6 text-right">
-                    <button class="text-slate-400 hover:text-primary transition-colors p-1"><span class="material-symbols-outlined text-[20px]">edit</span></button>
+                    <button onclick="openEditBookModal()" class="text-slate-400 hover:text-primary transition-colors p-1"><span class="material-symbols-outlined text-[20px]">edit</span></button>
                     <button class="text-slate-400 hover:text-red-500 transition-colors p-1"><span class="material-symbols-outlined text-[20px]">delete</span></button>
                   </td>
                 </tr>
@@ -119,7 +119,7 @@
                     </div>
                   </td>
                   <td class="py-4 px-6 text-right">
-                    <button class="text-slate-400 hover:text-primary transition-colors p-1"><span class="material-symbols-outlined text-[20px]">edit</span></button>
+                    <button onclick="openEditBookModal()" class="text-slate-400 hover:text-primary transition-colors p-1"><span class="material-symbols-outlined text-[20px]">edit</span></button>
                     <button class="text-slate-400 hover:text-red-500 transition-colors p-1"><span class="material-symbols-outlined text-[20px]">delete</span></button>
                   </td>
                 </tr>
@@ -151,7 +151,7 @@
                     </div>
                   </td>
                   <td class="py-4 px-6 text-right">
-                    <button class="text-slate-400 hover:text-primary transition-colors p-1"><span class="material-symbols-outlined text-[20px]">edit</span></button>
+                    <button onclick="openEditBookModal()" class="text-slate-400 hover:text-primary transition-colors p-1"><span class="material-symbols-outlined text-[20px]">edit</span></button>
                     <button class="text-slate-400 hover:text-red-500 transition-colors p-1"><span class="material-symbols-outlined text-[20px]">delete</span></button>
                   </td>
                 </tr>
@@ -183,7 +183,7 @@
                     </div>
                   </td>
                   <td class="py-4 px-6 text-right">
-                    <button class="text-slate-400 hover:text-primary transition-colors p-1"><span class="material-symbols-outlined text-[20px]">edit</span></button>
+                    <button onclick="openEditBookModal()" class="text-slate-400 hover:text-primary transition-colors p-1"><span class="material-symbols-outlined text-[20px]">edit</span></button>
                     <button class="text-slate-400 hover:text-red-500 transition-colors p-1"><span class="material-symbols-outlined text-[20px]">delete</span></button>
                   </td>
                 </tr>
@@ -215,7 +215,7 @@
                     </div>
                   </td>
                   <td class="py-4 px-6 text-right">
-                    <button class="text-slate-400 hover:text-primary transition-colors p-1"><span class="material-symbols-outlined text-[20px]">edit</span></button>
+                    <button onclick="openEditBookModal()" class="text-slate-400 hover:text-primary transition-colors p-1"><span class="material-symbols-outlined text-[20px]">edit</span></button>
                     <button class="text-slate-400 hover:text-red-500 transition-colors p-1"><span class="material-symbols-outlined text-[20px]">delete</span></button>
                   </td>
                 </tr>
@@ -247,7 +247,7 @@
                     </div>
                   </td>
                   <td class="py-4 px-6 text-right">
-                    <button class="text-slate-400 hover:text-primary transition-colors p-1"><span class="material-symbols-outlined text-[20px]">edit</span></button>
+                    <button onclick="openEditBookModal()" class="text-slate-400 hover:text-primary transition-colors p-1"><span class="material-symbols-outlined text-[20px]">edit</span></button>
                     <button class="text-slate-400 hover:text-red-500 transition-colors p-1"><span class="material-symbols-outlined text-[20px]">delete</span></button>
                   </td>
                 </tr>
@@ -279,7 +279,7 @@
                     </div>
                   </td>
                   <td class="py-4 px-6 text-right">
-                    <button class="text-slate-400 hover:text-primary transition-colors p-1"><span class="material-symbols-outlined text-[20px]">edit</span></button>
+                    <button onclick="openEditBookModal()" class="text-slate-400 hover:text-primary transition-colors p-1"><span class="material-symbols-outlined text-[20px]">edit</span></button>
                     <button class="text-slate-400 hover:text-red-500 transition-colors p-1"><span class="material-symbols-outlined text-[20px]">delete</span></button>
                   </td>
                 </tr>
@@ -311,7 +311,7 @@
                     </div>
                   </td>
                   <td class="py-4 px-6 text-right">
-                    <button class="text-slate-400 hover:text-primary transition-colors p-1"><span class="material-symbols-outlined text-[20px]">edit</span></button>
+                    <button onclick="openEditBookModal()" class="text-slate-400 hover:text-primary transition-colors p-1"><span class="material-symbols-outlined text-[20px]">edit</span></button>
                     <button class="text-slate-400 hover:text-red-500 transition-colors p-1"><span class="material-symbols-outlined text-[20px]">delete</span></button>
                   </td>
                 </tr>
@@ -343,8 +343,36 @@
   <!-- Add Book Modal -->
   <%- include('partials/modal-add-book') %>
 
+  <!-- Edit Book Modal -->
+  <%- include('partials/modal-edit-book') %>
+
   <script>
-    // Modal open/close
+    // Shared sub-category data
+    const categoryData = {
+      'fiction': [
+        { value: 'psych-thrillers', text: 'Psychological Thrillers' },
+        { value: 'historical', text: 'Historical Fiction' },
+        { value: 'dystopian', text: 'Dystopian & Sci-Fi' },
+        { value: 'mystery', text: 'Mystery & Crime' }
+      ],
+      'science': [
+        { value: 'cs', text: 'Computer Science' },
+        { value: 'math', text: 'Mathematics' },
+        { value: 'medicine', text: 'Medicine' }
+      ],
+      'humanities': [
+        { value: 'psychology', text: 'Mental Health & Psychology' },
+        { value: 'ya', text: 'YA Fiction & Tragedy' },
+        { value: 'biographies', text: 'Biographies & Memoirs' }
+      ],
+      'education': [
+        { value: 'language', text: 'Language Learning' },
+        { value: 'academic', text: 'Academic References' },
+        { value: 'textbooks', text: 'University Textbooks' }
+      ]
+    };
+
+    // --- Add Book Modal ---
     function openAddBookModal() {
       document.getElementById('add-book-modal').classList.remove('hidden');
     }
@@ -353,46 +381,17 @@
       document.getElementById('add-book-modal').classList.add('hidden');
     }
 
-    // Close modal on backdrop click
     document.getElementById('add-book-modal').addEventListener('click', function(e) {
       if (e.target === this) closeAddBookModal();
     });
 
-    // Close modal on Escape key
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') closeAddBookModal();
-    });
-
-    // Sub-category dropdown logic
+    // Sub-category for Add modal
     function updateSubCategories() {
       const mainCategory = document.getElementById('main-category').value;
       const subCategorySelect = document.getElementById('sub-category');
       subCategorySelect.innerHTML = '<option disabled selected value="">Select a sub-category</option>';
-      const categories = {
-        'fiction': [
-          { value: 'psych-thrillers', text: 'Psychological Thrillers' },
-          { value: 'historical', text: 'Historical Fiction' },
-          { value: 'dystopian', text: 'Dystopian & Sci-Fi' },
-          { value: 'mystery', text: 'Mystery & Crime' }
-        ],
-        'science': [
-          { value: 'cs', text: 'Computer Science' },
-          { value: 'math', text: 'Mathematics' },
-          { value: 'medicine', text: 'Medicine' }
-        ],
-        'humanities': [
-          { value: 'psychology', text: 'Mental Health & Psychology' },
-          { value: 'ya', text: 'YA Fiction & Tragedy' },
-          { value: 'biographies', text: 'Biographies & Memoirs' }
-        ],
-        'education': [
-          { value: 'language', text: 'Language Learning' },
-          { value: 'academic', text: 'Academic References' },
-          { value: 'textbooks', text: 'University Textbooks' }
-        ]
-      };
-      if (categories[mainCategory]) {
-        categories[mainCategory].forEach(sub => {
+      if (categoryData[mainCategory]) {
+        categoryData[mainCategory].forEach(sub => {
           const option = document.createElement('option');
           option.value = sub.value;
           option.textContent = sub.text;
@@ -403,6 +402,45 @@
         subCategorySelect.disabled = true;
       }
     }
+
+    // --- Edit Book Modal ---
+    function openEditBookModal() {
+      document.getElementById('edit-book-modal').classList.remove('hidden');
+    }
+
+    function closeEditBookModal() {
+      document.getElementById('edit-book-modal').classList.add('hidden');
+    }
+
+    document.getElementById('edit-book-modal').addEventListener('click', function(e) {
+      if (e.target === this) closeEditBookModal();
+    });
+
+    // Sub-category for Edit modal
+    function updateEditSubCategories() {
+      const mainCategory = document.getElementById('edit-main-category').value;
+      const subCategorySelect = document.getElementById('edit-sub-category');
+      subCategorySelect.innerHTML = '<option disabled selected value="">Select a sub-category</option>';
+      if (categoryData[mainCategory]) {
+        categoryData[mainCategory].forEach(sub => {
+          const option = document.createElement('option');
+          option.value = sub.value;
+          option.textContent = sub.text;
+          subCategorySelect.appendChild(option);
+        });
+        subCategorySelect.disabled = false;
+      } else {
+        subCategorySelect.disabled = true;
+      }
+    }
+
+    // Close any open modal on Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeAddBookModal();
+        closeEditBookModal();
+      }
+    });
   </script>
 
 </body>
