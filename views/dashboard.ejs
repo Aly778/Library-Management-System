@@ -95,7 +95,7 @@
               <p class="text-sm text-[#64748b] dark:text-[#94a3b8]">Admin controls for staff and patrons</p>
             </div>
             <div class="flex flex-wrap gap-4">
-              <button class="flex items-center gap-2 bg-[#1e3a8a] hover:bg-blue-800 text-white px-6 py-3 rounded-lg text-sm font-semibold transition-colors shadow-sm">
+              <button onclick="openAddStaffModal()" class="flex items-center gap-2 bg-[#1e3a8a] hover:bg-blue-800 text-white px-6 py-3 rounded-lg text-sm font-semibold transition-colors shadow-sm">
                 <span class="material-symbols-outlined text-[20px]">person_add</span>
                 Add New Staff Member
               </button>
@@ -194,6 +194,27 @@
       </div>
     </main>
   </div>
+
+  <!-- Add Staff Modal -->
+  <%- include('partials/modal-add-staff') %>
+
+  <script>
+    function openAddStaffModal() {
+      document.getElementById('add-staff-modal').classList.remove('hidden');
+    }
+
+    function closeAddStaffModal() {
+      document.getElementById('add-staff-modal').classList.add('hidden');
+    }
+
+    document.getElementById('add-staff-modal').addEventListener('click', function(e) {
+      if (e.target === this) closeAddStaffModal();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeAddStaffModal();
+    });
+  </script>
 
 </body>
 </html>
