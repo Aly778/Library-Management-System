@@ -47,21 +47,25 @@ class ApiService {
     });
   }
 
-  // Books endpoints
-  async getBooks(filters = {}) {
+  // Books endpoints - UPDATED TO MATCH index.js MIDDLEWARE
+  async getBooks(filters = {}) { 
     const params = new URLSearchParams(filters);
+    // Path: /api + /admin/books + /public/all
     return this.request(`/admin/books/public/all?${params}`, { method: 'GET' });
   }
 
   async getCategories() {
+    // Path: /api + /admin/books + /public/categories
     return this.request('/admin/books/public/categories', { method: 'GET' });
   }
 
   async getBookById(bookId) {
+    // Path: /api + /admin/books + /:id
     return this.request(`/admin/books/${bookId}`, { method: 'GET' });
   }
 
   async createBook(bookData) {
+    // Path: /api + /admin/books
     return this.request('/admin/books', {
       method: 'POST',
       body: JSON.stringify(bookData)
@@ -69,6 +73,7 @@ class ApiService {
   }
 
   async updateBook(bookId, bookData) {
+    // Path: /api + /admin/books + /:id
     return this.request(`/admin/books/${bookId}`, {
       method: 'PUT',
       body: JSON.stringify(bookData)
@@ -76,6 +81,7 @@ class ApiService {
   }
 
   async deleteBook(bookId) {
+    // Path: /api + /admin/books + /:id
     return this.request(`/admin/books/${bookId}`, { method: 'DELETE' });
   }
 
@@ -105,11 +111,7 @@ class ApiService {
       body: JSON.stringify({ items })
     });
   }
-
-  // Category endpoints
-  // Note: getCategories is defined above with public endpoint
 }
-
 
 // Create singleton instance
 const apiService = new ApiService();

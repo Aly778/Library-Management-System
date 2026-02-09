@@ -2,55 +2,66 @@
 <html class="light dark" lang="en">
 <head>
   <%- include('partials/head', { title: 'Book Catalog' }) %>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#3b82f6',
+            background: {
+              light: '#f8fafc',
+              dark: '#0f172a'
+            }
+          }
+        }
+      }
+    }
+  </script>
 </head>
 <body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display antialiased h-screen flex overflow-hidden">
 
-  <!-- Sidebar -->
   <%- include('partials/sidebar') %>
 
-  <!-- Main Content -->
   <div class="flex-1 flex flex-col h-full overflow-hidden relative">
-    <!-- Top Bar -->
     <header class="h-16 bg-white dark:bg-[#1a2230] border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-8 flex-shrink-0 z-10">
       <h1 class="text-2xl font-bold">Book Catalog</h1>
       <div class="flex items-center gap-4">
-        <a href="/cart" class="relative">
+        <a href="/cart" class="relative group">
           <span class="material-symbols-outlined text-2xl hover:text-primary transition-colors">shopping_cart</span>
-          <span id="cartCount" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
+          <span id="cartCount" class="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center border-2 border-white dark:border-[#1a2230]">0</span>
         </a>
       </div>
     </header>
 
     <main class="flex-1 overflow-y-auto p-8">
       <div class="max-w-7xl mx-auto flex flex-col gap-8">
-        <!-- Search and Filter Bar -->
-        <div class="bg-white dark:bg-[#1a2230] p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800">
-          <div class="flex flex-col lg:flex-row gap-4">
-            <div class="flex-1 relative group">
-              <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+        <div class="bg-white dark:bg-[#1a2230] p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800">
+          <div class="flex flex-col lg:flex-row gap-4 items-center">
+            <div class="flex-1 w-full relative group">
+              <span class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                 <span class="material-symbols-outlined text-slate-400">search</span>
               </span>
               <input id="searchInput" 
-                class="block w-full pl-10 pr-3 py-2.5 rounded-lg bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/50 text-sm" 
-                placeholder="Search books..." type="text"/>
+                class="block w-full pl-12 pr-4 py-3 rounded-xl bg-slate-100 dark:bg-slate-900 border-none focus:ring-2 focus:ring-primary/50 text-sm transition-all" 
+                placeholder="Search by title or author..." type="text"/>
             </div>
             
-            <select id="categoryFilter" class="px-4 py-2.5 rounded-lg bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/50 text-sm">
+            <select id="categoryFilter" class="w-full lg:w-64 px-4 py-3 rounded-xl bg-slate-100 dark:bg-slate-900 border-none focus:ring-2 focus:ring-primary/50 text-sm cursor-pointer">
               <option value="">All Categories</option>
             </select>
 
-            <button onclick="loadCatalog()" class="px-6 py-2.5 bg-primary hover:bg-blue-700 text-white rounded-lg font-medium transition-colors">
-              <span class="material-symbols-outlined align-middle mr-2">refresh</span> Refresh
+            <button onclick="loadCatalog()" class="w-full lg:w-auto px-6 py-3 bg-primary hover:bg-blue-600 text-white rounded-xl font-bold shadow-lg shadow-blue-500/20 transition-all flex items-center justify-center gap-2 active:scale-95">
+              <span class="material-symbols-outlined text-xl">refresh</span> Refresh
             </button>
           </div>
         </div>
 
-        <!-- Books Grid -->
-        <div id="booksContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          <!-- Books will be loaded here -->
-          <div class="col-span-full text-center py-12">
-            <span class="material-symbols-outlined text-6xl text-slate-400 block mb-4">hourglass_empty</span>
-            <p class="text-slate-500 dark:text-slate-400">Loading books...</p>
+        <div id="booksContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 pb-12">
+          <div class="col-span-full text-center py-24">
+            <span class="material-symbols-outlined text-6xl text-slate-300 animate-pulse block mb-4">hourglass_empty</span>
+            <p class="text-slate-500 dark:text-slate-400 font-medium">Fetching your library...</p>
           </div>
         </div>
       </div>
@@ -68,51 +79,52 @@
   <script>
     async function loadCatalog() {
       try {
-        // Load books
         const booksResponse = await apiService.getBooks();
         if (booksResponse.success) {
           catalogManager.books = booksResponse.books;
           catalogManager.filteredBooks = booksResponse.books;
           renderBooks();
         }
-
-        // Load categories
+        
         const categoriesResponse = await apiService.getCategories();
         if (categoriesResponse.success) {
           catalogManager.categories = categoriesResponse.categories;
           populateCategories();
         }
       } catch (error) {
-        showError('Failed to load catalog: ' + error.message);
+        console.error('Catalog Load Error:', error);
+        if (typeof showError === 'function') showError('Connection lost: ' + error.message);
       }
     }
 
     function renderBooks() {
       const container = document.getElementById('booksContainer');
-      if (catalogManager.filteredBooks.length === 0) {
+      if (!catalogManager.filteredBooks || catalogManager.filteredBooks.length === 0) {
         container.innerHTML = `
-          <div class="col-span-full text-center py-12">
-            <span class="material-symbols-outlined text-6xl text-slate-400 block mb-4">search_off</span>
-            <p class="text-slate-500 dark:text-slate-400">No books found</p>
-          </div>
-        `;
+          <div class="col-span-full text-center py-24 bg-white dark:bg-[#1a2230] rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-800">
+            <span class="material-symbols-outlined text-6xl text-slate-300 mb-4">search_off</span>
+            <p class="text-slate-500">No books found in the database.</p>
+          </div>`;
         return;
       }
-
+      // Renders using the high-fidelity card design from catalog-manager.js
       container.innerHTML = catalogManager.filteredBooks.map(book => catalogManager.renderBookCard(book)).join('');
     }
 
     function populateCategories() {
       const select = document.getElementById('categoryFilter');
+      const currentValue = select.value;
+      select.innerHTML = '<option value="">All Categories</option>';
       catalogManager.categories.forEach(cat => {
         const option = document.createElement('option');
         option.value = cat.Cid;
         option.textContent = cat.Cname;
         select.appendChild(option);
       });
+      select.value = currentValue;
     }
 
-    // Event listeners
+    // Interaction Handlers
     document.getElementById('searchInput').addEventListener('input', (e) => {
       catalogManager.searchBooks(e.target.value);
       renderBooks();
@@ -123,12 +135,14 @@
       renderBooks();
     });
 
-    // Update cart count
     function updateCartCount() {
-      document.getElementById('cartCount').textContent = cartService.getItemCount();
+      const countEl = document.getElementById('cartCount');
+      if (countEl && typeof cartService !== 'undefined') {
+        countEl.textContent = cartService.getItemCount();
+      }
     }
 
-    // Initial load
+    // Lifecycle
     document.addEventListener('DOMContentLoaded', () => {
       if (!authService.isAuthenticated()) {
         window.location.href = '/login';
@@ -136,182 +150,14 @@
       }
       loadCatalog();
       updateCartCount();
-      cartService.cart = cartService.loadCart();
+      
+      // Hook into cart updates to refresh count bubble
+      const originalAdd = cartService.addItem.bind(cartService);
+      cartService.addItem = (...args) => {
+        originalAdd(...args);
+        updateCartCount();
+      };
     });
-
-    // Update cart count whenever it changes
-    const originalAddItem = cartService.addItem.bind(cartService);
-    cartService.addItem = function(...args) {
-      originalAddItem(...args);
-      updateCartCount();
-    };
   </script>
-</body>
-</html>
-
-          <div class="group flex flex-col bg-white dark:bg-[#1a2230] rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden hover:shadow-lg dark:hover:shadow-slate-900/50 transition-all duration-300 hover:-translate-y-1">
-            <div class="relative aspect-[3/4] overflow-hidden bg-slate-100 dark:bg-slate-800">
-              <img alt="The Great Gatsby book cover" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZJhFkzSSKv65bxv40XSts0TtJws5gDZabPmcZOzUNnPe8nx7QszI-ETR32y1Cg93nIQqSJwMM4Pzs2NpyGbtsXCBR27qYtFU12EhPEFZLxaWC3gzpWXfO1cQ3WosO4WcDJXcZLWL7X52yX63livD4eggfRjzTmrXvV7dlg4T_HN96mwGg6f1p7Mijah0zWVvmgZeiu6T35RC_GVmaw1HpeeDK8fpdjN4pBC6aTF9vb4cEfyBHVE3EqzQrq-Ki4cELrFDC9zauom4"/>
-              <div class="absolute bottom-3 left-3">
-                <span class="px-2.5 py-1 rounded-md bg-white/90 dark:bg-slate-900/90 text-xs font-semibold text-slate-900 dark:text-white backdrop-blur-sm shadow-sm">Fiction</span>
-              </div>
-            </div>
-            <div class="p-5 flex flex-col flex-1">
-              <h3 class="text-base font-bold text-slate-900 dark:text-white line-clamp-1 group-hover:text-primary transition-colors mb-2">The Great Gatsby</h3>
-              <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">F. Scott Fitzgerald</p>
-              <div class="mt-auto flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-700/50">
-                <span class="text-lg font-bold text-slate-900 dark:text-white">$14.99</span>
-                <button class="flex items-center gap-2 px-3 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-blue-600 active:bg-blue-700 transition-colors">
-                  <span class="material-symbols-outlined text-[18px]">add_shopping_cart</span> Add
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Book Card: A Brief History of Time -->
-          <div class="group flex flex-col bg-white dark:bg-[#1a2230] rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden hover:shadow-lg dark:hover:shadow-slate-900/50 transition-all duration-300 hover:-translate-y-1">
-            <div class="relative aspect-[3/4] overflow-hidden bg-slate-100 dark:bg-slate-800">
-              <img alt="A Brief History of Time book cover" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7GnWDW5kJetyPthFjAW16LAG9Ad7mUfyPP7GvPSU5YXeqojtIp6W-mgPlkqYIzxmY-_zQpG_9LMNkh0lBN2lJOYuSBgeVSptpf0aMhmsvmohobhmRf9EUUKGB9ytVtkQSUJ1l_Z7S7X31bmFOwqp4DiOOkNuwsrlYVZKqh3aNwO1BI-l1gtwBiH_LPz-ibWoZGA4SXAgFMnehvW-leczKT48IdZxARTMX4kLOjs1fCV2t25viddjxNcshvksRWZNnv4jsk8HhUm4"/>
-              <div class="absolute bottom-3 left-3">
-                <span class="px-2.5 py-1 rounded-md bg-white/90 dark:bg-slate-900/90 text-xs font-semibold text-slate-900 dark:text-white backdrop-blur-sm shadow-sm">Science &amp; Tech</span>
-              </div>
-            </div>
-            <div class="p-5 flex flex-col flex-1">
-              <h3 class="text-base font-bold text-slate-900 dark:text-white line-clamp-1 group-hover:text-primary transition-colors mb-2">A Brief History of Time</h3>
-              <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Stephen Hawking</p>
-              <div class="mt-auto flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-700/50">
-                <span class="text-lg font-bold text-slate-900 dark:text-white">$18.50</span>
-                <button class="flex items-center gap-2 px-3 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-blue-600 active:bg-blue-700 transition-colors">
-                  <span class="material-symbols-outlined text-[18px]">add_shopping_cart</span> Add
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Book Card: Refactoring UI -->
-          <div class="group flex flex-col bg-white dark:bg-[#1a2230] rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden hover:shadow-lg dark:hover:shadow-slate-900/50 transition-all duration-300 hover:-translate-y-1">
-            <div class="relative aspect-[3/4] overflow-hidden bg-slate-100 dark:bg-slate-800">
-              <img alt="Refactoring UI book cover" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUc094Ro8fprU9Sqf8UtEiGHfV8YIdsSVlzxtuUCxoXvhdnNyRkQB5eeUomcfQzFmnvxvm_y3ZgWjawauYZ4YZ5HM06ESqNqFMtoornU-UcNLPWimL2sUZaz2LXU1b2oCgkdK8nf9djzHnXDHXxVskFbOsMCvTdhePx7QFSRSDxarptDDhBINDVl-Yqt1DzmeUQRnDC1OTuGICtgYTDPkTusrG0W7jTayJ1CUMFIo-RwC10WU-9oOI2sYzFkrFff68kzzOxsXo-gU"/>
-              <div class="absolute bottom-3 left-3">
-                <span class="px-2.5 py-1 rounded-md bg-white/90 dark:bg-slate-900/90 text-xs font-semibold text-slate-900 dark:text-white backdrop-blur-sm shadow-sm">Science &amp; Tech</span>
-              </div>
-            </div>
-            <div class="p-5 flex flex-col flex-1">
-              <h3 class="text-base font-bold text-slate-900 dark:text-white line-clamp-1 group-hover:text-primary transition-colors mb-2">Refactoring UI</h3>
-              <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Adam Wathan</p>
-              <div class="mt-auto flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-700/50">
-                <span class="text-lg font-bold text-slate-900 dark:text-white">$29.00</span>
-                <button class="flex items-center gap-2 px-3 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-blue-600 active:bg-blue-700 transition-colors">
-                  <span class="material-symbols-outlined text-[18px]">add_shopping_cart</span> Add
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Book Card: Modern Art History -->
-          <div class="group flex flex-col bg-white dark:bg-[#1a2230] rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden hover:shadow-lg dark:hover:shadow-slate-900/50 transition-all duration-300 hover:-translate-y-1">
-            <div class="relative aspect-[3/4] overflow-hidden bg-slate-100 dark:bg-slate-800">
-              <img alt="Modern Art History book cover" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCNSU9A2wjAEwACooa5TDap6hA-vohoKP0MprbqhzqZho7StFln3C7jmXasJvynQLo91gwuagpsxQlZ4K8WlvSM0GoU-j4wZRtvibOsH1Cw7hRxQfLymBQE6gpr7AgBOI2wKyITmGY6znQ7SpFMPd0IOmQADDBwDb_cPT5RUbnOXCIvX8xCEn0Jj7CX063d6M3oqnmRyGFeUCeg0cM66wpB5WDGT1bZlFBk_48olbogTQtMbTjUQap3zg5tiDMQJ9E5sO9muv3MigM"/>
-              <div class="absolute bottom-3 left-3">
-                <span class="px-2.5 py-1 rounded-md bg-white/90 dark:bg-slate-900/90 text-xs font-semibold text-slate-900 dark:text-white backdrop-blur-sm shadow-sm">Humanities</span>
-              </div>
-            </div>
-            <div class="p-5 flex flex-col flex-1">
-              <h3 class="text-base font-bold text-slate-900 dark:text-white line-clamp-1 group-hover:text-primary transition-colors mb-2">Modern Art History</h3>
-              <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Sarah Thornton</p>
-              <div class="mt-auto flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-700/50">
-                <span class="text-lg font-bold text-slate-900 dark:text-white">$32.50</span>
-                <button class="flex items-center gap-2 px-3 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-blue-600 active:bg-blue-700 transition-colors">
-                  <span class="material-symbols-outlined text-[18px]">add_shopping_cart</span> Add
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Book Card: Educated -->
-          <div class="group flex flex-col bg-white dark:bg-[#1a2230] rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden hover:shadow-lg dark:hover:shadow-slate-900/50 transition-all duration-300 hover:-translate-y-1">
-            <div class="relative aspect-[3/4] overflow-hidden bg-slate-100 dark:bg-slate-800">
-              <img alt="Educated book cover" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHWlqy-SipecNtVkqz1PHU_8PRb8pDocbRAkjDJ9JvdKU_Z_r5UsFuYEXerpANW5_6rtTWE9689_waQwVk1-nMyE7wry7-_2PYUz0KV7Lgk-8G-pcOVUrtlWjtoxTV0T2ZUUkpecA3XtTS3bCnX20zt8G5YipY337orufuSHry4BhbLrQXPFE-r3T6ghf0N1Z24tRj-J8te-5s1QHOnAzVs7QCClZgsHNCHxE9c5aPcMmGh4gOjaufWBpHZGRoPOkYsF7XfrM96c8"/>
-              <div class="absolute bottom-3 left-3">
-                <span class="px-2.5 py-1 rounded-md bg-white/90 dark:bg-slate-900/90 text-xs font-semibold text-slate-900 dark:text-white backdrop-blur-sm shadow-sm">Education</span>
-              </div>
-            </div>
-            <div class="p-5 flex flex-col flex-1">
-              <h3 class="text-base font-bold text-slate-900 dark:text-white line-clamp-1 group-hover:text-primary transition-colors mb-2">Educated</h3>
-              <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Tara Westover</p>
-              <div class="mt-auto flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-700/50">
-                <span class="text-lg font-bold text-slate-900 dark:text-white">$16.00</span>
-                <button class="flex items-center gap-2 px-3 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-blue-600 active:bg-blue-700 transition-colors">
-                  <span class="material-symbols-outlined text-[18px]">add_shopping_cart</span> Add
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Book Card: The Plant Paradox -->
-          <div class="group flex flex-col bg-white dark:bg-[#1a2230] rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden hover:shadow-lg dark:hover:shadow-slate-900/50 transition-all duration-300 hover:-translate-y-1">
-            <div class="relative aspect-[3/4] overflow-hidden bg-slate-100 dark:bg-slate-800">
-              <img alt="The Plant Paradox book cover" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHPyoAJdcQtR8Nd6jgooZNwp_Tq5xh0Zo34iVK5iptjZNROneXwTxeF4vOorgy4NUmaT_I7rT184ZMzu-d7pNz9R52POnbW9Tz8xM6T2k83KOz9S0DZYg-NjN45Ys3YYTu6JPA1zTwHvJY9yKUijQiURQgP2kvUq-CdnNxuN84Lt8dDDwjeu9vJ5CBd3lnBXa9ZS3jKxKtQ0AOfPG0ZEaQaKwDrav5BWBVmnSPFDTPxWsI9adA86VOgZYDfVIj27oKeq8B9yA7BRg"/>
-              <div class="absolute bottom-3 left-3">
-                <span class="px-2.5 py-1 rounded-md bg-white/90 dark:bg-slate-900/90 text-xs font-semibold text-slate-900 dark:text-white backdrop-blur-sm shadow-sm">Science &amp; Tech</span>
-              </div>
-            </div>
-            <div class="p-5 flex flex-col flex-1">
-              <h3 class="text-base font-bold text-slate-900 dark:text-white line-clamp-1 group-hover:text-primary transition-colors mb-2">The Plant Paradox</h3>
-              <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Steven R. Gundry</p>
-              <div class="mt-auto flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-700/50">
-                <span class="text-lg font-bold text-slate-900 dark:text-white">$19.99</span>
-                <button class="flex items-center gap-2 px-3 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-blue-600 active:bg-blue-700 transition-colors">
-                  <span class="material-symbols-outlined text-[18px]">add_shopping_cart</span> Add
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Book Card: 1984 -->
-          <div class="group flex flex-col bg-white dark:bg-[#1a2230] rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden hover:shadow-lg dark:hover:shadow-slate-900/50 transition-all duration-300 hover:-translate-y-1">
-            <div class="relative aspect-[3/4] overflow-hidden bg-slate-100 dark:bg-slate-800">
-              <img alt="1984 book cover" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOxSjHFbhtKg2whUjgLsBzFUEIhjtelG80DvgbfmNNr4mxFqFAhX3nMRuMgXDSAKa1sFg_dGyTxlEq5E64-V2eARK5J2do1D3f8NmU5FcMS35i0wv3kljhyBatDIQ6rKJzwgVyq9NUWdTXerWHw7SjeFYBGF4e_IoDxKZsbZpt6hUjNf2qlor5dvlWuwUo9PuUNZ7xFQre505FGFheQJpnp8CFrB6J6INLB2M1CJha4Dc6oCLWBOyH4dGAfdh2JOQpb6O1gmcweiY"/>
-              <div class="absolute bottom-3 left-3">
-                <span class="px-2.5 py-1 rounded-md bg-white/90 dark:bg-slate-900/90 text-xs font-semibold text-slate-900 dark:text-white backdrop-blur-sm shadow-sm">Fiction</span>
-              </div>
-            </div>
-            <div class="p-5 flex flex-col flex-1">
-              <h3 class="text-base font-bold text-slate-900 dark:text-white line-clamp-1 group-hover:text-primary transition-colors mb-2">1984</h3>
-              <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">George Orwell</p>
-              <div class="mt-auto flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-700/50">
-                <span class="text-lg font-bold text-slate-900 dark:text-white">$12.50</span>
-                <button class="flex items-center gap-2 px-3 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-blue-600 active:bg-blue-700 transition-colors">
-                  <span class="material-symbols-outlined text-[18px]">add_shopping_cart</span> Add
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Book Card: Sapiens -->
-          <div class="group flex flex-col bg-white dark:bg-[#1a2230] rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden hover:shadow-lg dark:hover:shadow-slate-900/50 transition-all duration-300 hover:-translate-y-1">
-            <div class="relative aspect-[3/4] overflow-hidden bg-slate-100 dark:bg-slate-800">
-              <img alt="Sapiens book cover" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCYKiPSXk5ZVruTgq9IqS0jLHKXCH8R0wqjH5JRJfjlTl6tGYydQTRRtAnouv4WgTkKNabaw_rDyxQy58sCtrQIkqtfVw3nkcELeGkSdOUV8fmcRenEkW9IgWHOonNiPDzsUCxkSbcFbiJUTsVRuzsQNEasbO81reOI4HXQrJmgdGQ4qm585lFokt-ew4-exzr49XlJRIdDOIpVee-1jeVsFIPTRvIYrBibIA9s5nBUuKP-bku_zDqfmIaGZ5RH0OU2cbb9_PWmKg0"/>
-              <div class="absolute bottom-3 left-3">
-                <span class="px-2.5 py-1 rounded-md bg-white/90 dark:bg-slate-900/90 text-xs font-semibold text-slate-900 dark:text-white backdrop-blur-sm shadow-sm">Humanities</span>
-              </div>
-            </div>
-            <div class="p-5 flex flex-col flex-1">
-              <h3 class="text-base font-bold text-slate-900 dark:text-white line-clamp-1 group-hover:text-primary transition-colors mb-2">Sapiens</h3>
-              <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Yuval Noah Harari</p>
-              <div class="mt-auto flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-700/50">
-                <span class="text-lg font-bold text-slate-900 dark:text-white">$22.00</span>
-                <button class="flex items-center gap-2 px-3 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-blue-600 active:bg-blue-700 transition-colors">
-                  <span class="material-symbols-outlined text-[18px]">add_shopping_cart</span> Add
-                </button>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </main>
-  </div>
-
 </body>
 </html>

@@ -1,5 +1,6 @@
 const express = require('express');
 require('dotenv').config();
+const cors = require('cors'); // Added this line
 const db = require('./config/db'); 
 
 // Import Routes
@@ -10,20 +11,13 @@ const superAdminRoutes = require('./routes/superAdmin');
 
 const app = express(); 
 
-// 1. CORS Middleware (MUST come first)
-const cors = (req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
-  res.header('Access-Control-Allow-Credentials', 'true');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
-  
-  if (req.method === 'OPTIONS') {
-    return res.sendStatus(204);
-  }
-  next();
-};
-
-app.use(cors);
+// 1. CORS Middleware (Updated to use the official cors package)
+app.use(cors({
+  origin: 'http://localhost:3000',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  credentials: true
+}));
 
 // 2. Global Middleware
 app.use(express.json()); 
