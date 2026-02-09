@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html class="light dark" lang="en">
+<head>
+  <%- include('partials/head', { title: 'Checkout' }) %>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display antialiased h-screen flex overflow-hidden">
+
+  <!-- Sidebar -->
+  <%- include('partials/sidebar') %>
+
+  <!-- Main Content -->
+  <div class="flex-1 flex flex-col h-full overflow-hidden relative">
+    <!-- Top Bar -->
+    <header class="h-16 bg-white dark:bg-[#1a2230] border-b border-slate-200 dark:border-slate-800 flex items-center px-8 flex-shrink-0 z-10">
+      <h1 class="text-2xl font-bold">Checkout</h1>
+    </header>
+
+    <main class="flex-1 overflow-y-auto p-8">
+      <div class="max-w-4xl mx-auto">
+        <!-- Progress Indicator -->
+        <div class="mb-8 flex items-center justify-between">
+          <div class="flex items-center flex-1">
+            <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold">1</div>
+            <div class="flex-1 h-1 bg-primary mx-2"></div>
+            <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold">2</div>
+            <div class="flex-1 h-1 bg-slate-300 dark:bg-slate-700 mx-2"></div>
+            <div class="w-10 h-10 rounded-full bg-slate-300 dark:bg-slate-700 text-slate-700 dark:text-slate-300 flex items-center justify-center font-bold">3</div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <!-- Checkout Form -->
+          <div class="lg:col-span-2">
+            <!-- Billing Address -->
+            <div class="bg-white dark:bg-[#1a2230] rounded-lg shadow-sm border border-slate-200 dark:border-slate-800 p-6 mb-6">
+              <h2 class="text-xl font-bold mb-6">Billing Address</h2>
+              <form id="billingForm" class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium mb-2">First Name</label>
+                    <input type="text" required class="w-full px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-900"/>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium mb-2">Last Name</label>
+                    <input type="text" required class="w-full px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-900"/>
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium mb-2">Email</label>
+                  <input type="email" required class="w-full px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-900"/>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium mb-2">Address</label>
+                  <input type="text" required class="w-full px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-900"/>
+                </div>
+
+                <div class="grid grid-cols-3 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium mb-2">City</label>
+                    <input type="text" required class="w-full px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-900"/>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium mb-2">State</label>
+                    <input type="text" required class="w-full px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-900"/>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium mb-2">ZIP</label>
+                    <input type="text" required class="w-full px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-900"/>
+                  </div>
+                </div>
+              </form>
+            </div>
+
+            <!-- Payment Method -->
+            <div class="bg-white dark:bg-[#1a2230] rounded-lg shadow-sm border border-slate-200 dark:border-slate-800 p-6">
+              <h2 class="text-xl font-bold mb-6">Payment Method</h2>
+              <div class="space-y-4">
+                <label class="flex items-center p-4 border border-slate-300 dark:border-slate-700 rounded-lg cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800">
+                  <input type="radio" name="payment" value="card" checked class="mr-3"/>
+                  <span class="font-medium">Credit Card</span>
+                </label>
+                <label class="flex items-center p-4 border border-slate-300 dark:border-slate-700 rounded-lg cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800">
+                  <input type="radio" name="payment" value="paypal" class="mr-3"/>
+                  <span class="font-medium">PayPal</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Order Summary -->
+          <div class="lg:col-span-1">
+            <div class="bg-white dark:bg-[#1a2230] rounded-lg shadow-sm border border-slate-200 dark:border-slate-800 p-6 sticky top-20">
+              <h2 class="text-xl font-bold mb-6">Order Summary</h2>
+              
+              <div id="orderItems" class="space-y-3 mb-6 pb-6 border-b border-slate-200 dark:border-slate-800">
+                <!-- Items will be loaded here -->
+              </div>
+
+              <div class="space-y-4 mb-6 pb-6 border-b border-slate-200 dark:border-slate-800">
+                <div class="flex justify-between text-sm">
+                  <span class="text-slate-600 dark:text-slate-400">Subtotal</span>
+                  <span id="checkoutSubtotal" class="font-medium">$0.00</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                  <span class="text-slate-600 dark:text-slate-400">Tax (10%)</span>
+                  <span id="checkoutTax" class="font-medium">$0.00</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                  <span class="text-slate-600 dark:text-slate-400">Shipping</span>
+                  <span id="checkoutShipping" class="font-medium">$0.00</span>
+                </div>
+              </div>
+
+              <div class="flex justify-between text-lg font-bold mb-6">
+                <span>Total</span>
+                <span id="checkoutTotal" class="text-primary">$0.00</span>
+              </div>
+
+              <button onclick="completeCheckout()" class="w-full bg-primary hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-colors">
+                Complete Purchase
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <%- include('partials/footer') %>
+
+  <script src="/js/api-service.js"></script>
+  <script src="/js/auth-service.js"></script>
+  <script src="/js/cart-service.js"></script>
+  <script src="/js/main.js"></script>
+
+  <script>
+    function renderOrderSummary() {
+      const items = cartService.getItems();
+      const container = document.getElementById('orderItems');
+      
+      container.innerHTML = items.map(item => `
+        <div class="flex justify-between text-sm">
+          <span>${item.Bname} x${item.quantity}</span>
+          <span class="font-medium">$${(item.Bprice * item.quantity).toFixed(2)}</span>
+        </div>
+      `).join('');
+
+      updateCheckoutSummary();
+    }
+
+    function updateCheckoutSummary() {
+      const subtotal = cartService.getTotal();
+      const tax = subtotal * 0.1;
+      const shipping = subtotal > 0 ? 5 : 0;
+      const total = subtotal + tax + shipping;
+
+      document.getElementById('checkoutSubtotal').textContent = '$' + subtotal.toFixed(2);
+      document.getElementById('checkoutTax').textContent = '$' + tax.toFixed(2);
+      document.getElementById('checkoutShipping').textContent = '$' + shipping.toFixed(2);
+      document.getElementById('checkoutTotal').textContent = '$' + total.toFixed(2);
+    }
+
+    async function completeCheckout() {
+      if (cartService.isEmpty()) {
+        showError('Cart is empty');
+        return;
+      }
+
+      try {
+        const items = cartService.getItems();
+        const response = await apiService.purchaseBooks(items);
+        
+        if (response.success) {
+          showSuccess('Purchase completed successfully!');
+          cartService.clear();
+          setTimeout(() => {
+            window.location.href = '/history';
+          }, 2000);
+        } else {
+          showError(response.error || 'Purchase failed');
+        }
+      } catch (error) {
+        showError('Purchase failed: ' + error.message);
+      }
+    }
+
+    // Initial load
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!authService.isAuthenticated()) {
+        window.location.href = '/login';
+        return;
+      }
+      renderOrderSummary();
+    });
+  </script>
+</body>
+</html>

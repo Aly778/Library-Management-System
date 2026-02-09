@@ -1,0 +1,104 @@
+<!-- Add Staff Modal Overlay -->
+<div id="add-staff-modal" class="hidden absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+  <div class="w-full max-w-md bg-[#1e293b] rounded-xl border border-[#334155] shadow-2xl overflow-hidden transform transition-all">
+    <!-- Modal Header -->
+    <div class="px-6 py-4 border-b border-[#334155] flex justify-between items-center bg-slate-800/50">
+      <h3 class="text-lg font-semibold text-white">Add New Staff Member</h3>
+      <button onclick="closeAddStaffModal()" class="text-[#94a3b8] hover:text-white transition-colors">
+        <span class="material-symbols-outlined text-[20px]">close</span>
+      </button>
+    </div>
+
+    <!-- Form -->
+    <form class="p-6 space-y-5">
+      <!-- Name Fields -->
+      <div class="flex gap-4">
+        <div class="space-y-1 w-1/2">
+          <label class="block text-sm font-medium text-[#94a3b8]" for="staff-firstName">First Name</label>
+          <div class="relative">
+            <span class="material-symbols-outlined absolute left-3 top-2.5 text-[#94a3b8] text-[20px]">person</span>
+            <input class="w-full pl-10 pr-4 py-2 bg-[#0f172a] border border-[#334155] rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-[#3b82f6] focus:ring-1 focus:ring-[#3b82f6] transition-colors text-sm" id="staff-firstName" name="firstName" placeholder="Sarah" type="text"/>
+          </div>
+        </div>
+        <div class="space-y-1 w-1/2">
+          <label class="block text-sm font-medium text-[#94a3b8]" for="staff-lastName">Last Name</label>
+          <div class="relative">
+            <span class="material-symbols-outlined absolute left-3 top-2.5 text-[#94a3b8] text-[20px]">person</span>
+            <input class="w-full pl-10 pr-4 py-2 bg-[#0f172a] border border-[#334155] rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-[#3b82f6] focus:ring-1 focus:ring-[#3b82f6] transition-colors text-sm" id="staff-lastName" name="lastName" placeholder="Connor" type="text"/>
+          </div>
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="space-y-1">
+        <label class="block text-sm font-medium text-[#94a3b8]" for="staff-email">Email Address</label>
+        <div class="relative">
+          <span class="material-symbols-outlined absolute left-3 top-2.5 text-[#94a3b8] text-[20px]">mail</span>
+          <input class="w-full pl-10 pr-4 py-2 bg-[#0f172a] border border-[#334155] rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-[#3b82f6] focus:ring-1 focus:ring-[#3b82f6] transition-colors text-sm" id="staff-email" name="email" placeholder="sarah@library.com" type="email"/>
+        </div>
+      </div>
+
+      <!-- Phone & Gender -->
+      <div class="flex gap-4">
+        <div class="space-y-1 w-1/2">
+          <label class="block text-sm font-medium text-[#94a3b8]" for="staff-phone">Phone Number</label>
+          <div class="relative">
+            <span class="material-symbols-outlined absolute left-3 top-2.5 text-[#94a3b8] text-[20px]">phone</span>
+            <input class="w-full pl-10 pr-4 py-2 bg-[#0f172a] border border-[#334155] rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-[#3b82f6] focus:ring-1 focus:ring-[#3b82f6] transition-colors text-sm" id="staff-phone" name="phone" placeholder="+1 (555) 000-0000" type="tel"/>
+          </div>
+        </div>
+        <div class="space-y-1 w-1/2">
+          <label class="block text-sm font-medium text-[#94a3b8]" for="staff-gender">Gender</label>
+          <div class="relative">
+            <span class="material-symbols-outlined absolute left-3 top-2.5 text-[#94a3b8] text-[20px]">wc</span>
+            <select class="w-full pl-10 pr-8 py-2 bg-[#0f172a] border border-[#334155] rounded-lg text-white focus:outline-none focus:border-[#3b82f6] focus:ring-1 focus:ring-[#3b82f6] transition-colors appearance-none text-sm" id="staff-gender" name="gender">
+              <option disabled selected value="">Select</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
+            </select>
+            <span class="material-symbols-outlined absolute right-3 top-2.5 text-[#94a3b8] text-[20px] pointer-events-none">expand_more</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Job Role -->
+      <div class="space-y-1">
+        <label class="block text-sm font-medium text-[#94a3b8]" for="staff-role">Job Role</label>
+        <div class="relative">
+          <span class="material-symbols-outlined absolute left-3 top-2.5 text-[#94a3b8] text-[20px]">badge</span>
+          <select class="w-full pl-10 pr-10 py-2 bg-[#0f172a] border border-[#334155] rounded-lg text-white focus:outline-none focus:border-[#3b82f6] focus:ring-1 focus:ring-[#3b82f6] transition-colors appearance-none text-sm" id="staff-role" name="role">
+            <option disabled selected value="">Select a role</option>
+            <option value="librarian">Librarian</option>
+            <option value="admin">Administrator</option>
+            <option value="assistant">Library Assistant</option>
+            <option value="archivist">Archivist</option>
+            <option value="staff">General Staff</option>
+          </select>
+          <span class="material-symbols-outlined absolute right-3 top-2.5 text-[#94a3b8] text-[20px] pointer-events-none">expand_more</span>
+        </div>
+      </div>
+
+      <!-- Password -->
+      <div class="space-y-1">
+        <label class="block text-sm font-medium text-[#94a3b8]" for="staff-password">Password</label>
+        <div class="relative">
+          <span class="material-symbols-outlined absolute left-3 top-2.5 text-[#94a3b8] text-[20px]">lock</span>
+          <input class="w-full pl-10 pr-4 py-2 bg-[#0f172a] border border-[#334155] rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-[#3b82f6] focus:ring-1 focus:ring-[#3b82f6] transition-colors text-sm" id="staff-password" name="password" placeholder="••••••••" type="password"/>
+        </div>
+        <p class="text-xs text-[#94a3b8] mt-1">Must be at least 8 characters long.</p>
+      </div>
+
+      <!-- Actions -->
+      <div class="pt-4 flex items-center justify-end gap-3">
+        <button onclick="closeAddStaffModal()" class="px-4 py-2 text-sm font-medium text-[#94a3b8] hover:text-white hover:bg-slate-800 rounded-lg transition-colors" type="button">
+          Cancel
+        </button>
+        <button class="px-4 py-2 text-sm font-medium text-white bg-[#3b82f6] hover:bg-blue-600 rounded-lg shadow-lg shadow-blue-500/20 transition-all flex items-center gap-2" type="button">
+          <span class="material-symbols-outlined text-[18px]">person_add</span>
+          Add Member
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
