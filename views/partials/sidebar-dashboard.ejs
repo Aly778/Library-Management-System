@@ -26,16 +26,39 @@
 
   <!-- Bottom Section -->
   <div class="p-4 border-t border-[#e2e8f0] dark:border-[#334155]">
-    <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#64748b] dark:text-[#94a3b8] hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group mb-2" href="#">
-      <span class="material-symbols-outlined text-[24px]">settings</span>
-      <span class="text-sm font-medium group-hover:text-[#1e293b] dark:group-hover:text-white">Settings</span>
-    </a>
-    <div class="flex items-center gap-3 px-3 py-2 mt-2">
-      <div class="bg-center bg-no-repeat bg-cover rounded-full size-9 border border-[#e2e8f0] dark:border-[#334155]" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCSEABfDP0NX7x2Xu6ZBjx8wgxEGapZ8Vj9RSvx_MPA50__Kr8Qbq6o4SwqqayF2v1x-1Z9BANEyv28rRzFndjDtOKXmTBZ-UECFg7F4r2kLXnLT8AJqC2SZ30U2nAv5NSWLzDb_WSWo53WJ7hCuqaq299kqBzFIBBuEp7A6xs8-FuT757qIWKw0Z85ym1ylifPmnbiALXggpUww6EgdJMWke2DcSaA95Z90nBamgUdIkTXIjOJmkK-iSx2R041fclBF0TMsh5Xg2Y");'></div>
-      <div class="flex flex-col overflow-hidden">
-        <p class="text-[#1e293b] dark:text-[#f8fafc] text-sm font-medium truncate">Eleanor Pena</p>
-        <p class="text-[#64748b] dark:text-[#94a3b8] text-xs truncate">Head Librarian</p>
+    <div class="flex items-center gap-3 px-3 py-2 justify-between">
+      <div class="flex items-center gap-3 overflow-hidden flex-1">
+        <div class="bg-center bg-no-repeat bg-cover rounded-full size-9 border border-[#e2e8f0] dark:border-[#334155]" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCSEABfDP0NX7x2Xu6ZBjx8wgxEGapZ8Vj9RSvx_MPA50__Kr8Qbq6o4SwqqayF2v1x-1Z9BANEyv28rRzFndjDtOKXmTBZ-UECFg7F4r2kLXnLT8AJqC2SZ30U2nAv5NSWLzDb_WSWo53WJ7hCuqaq299kqBzFIBBuEp7A6xs8-FuT757qIWKw0Z85ym1ylifPmnbiALXggpUww6EgdJMWke2DcSaA95Z90nBamgUdIkTXIjOJmkK-iSx2R041fclBF0TMsh5Xg2Y");'></div>
+        <div class="flex flex-col overflow-hidden flex-1">
+          <p id="sidebarFirstName" class="text-[#1e293b] dark:text-[#f8fafc] text-sm font-medium truncate">User</p>
+          <p id="sidebarLastName" class="text-[#64748b] dark:text-[#94a3b8] text-xs truncate">Name</p>
+        </div>
       </div>
+      <button onclick="handleLogout()" class="flex items-center justify-center p-1 text-[#64748b] dark:text-[#94a3b8] hover:text-[#1e3a8a] dark:hover:text-blue-400 transition-colors" title="Logout">
+        <span class="material-symbols-outlined">logout</span>
+      </button>
     </div>
   </div>
 </aside>
+
+<script>
+// Update sidebar with user info from localStorage
+document.addEventListener('DOMContentLoaded', () => {
+  const userInfo = localStorage.getItem('user');
+  if (userInfo) {
+    try {
+      const user = JSON.parse(userInfo);
+      
+      // Update first and last name
+      if (user.firstName) {
+        document.getElementById('sidebarFirstName').textContent = user.firstName;
+      }
+      if (user.lastName) {
+        document.getElementById('sidebarLastName').textContent = user.lastName;
+      }
+    } catch (e) {
+      console.log('Could not parse user info');
+    }
+  }
+});
+</script>

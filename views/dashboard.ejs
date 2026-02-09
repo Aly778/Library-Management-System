@@ -39,7 +39,7 @@
 
           <!-- Greeting -->
           <div class="flex flex-col gap-1">
-            <h3 class="text-2xl font-bold text-[#1e293b] dark:text-[#f8fafc]">Good Morning, Eleanor!</h3>
+            <h3 id="greetingMessage" class="text-2xl font-bold text-[#1e293b] dark:text-[#f8fafc]">Good Morning, User!</h3>
             <p class="text-[#64748b] dark:text-[#94a3b8]">Here's what's happening in the library today.</p>
           </div>
 
@@ -198,7 +198,25 @@
   <!-- Add Staff Modal -->
   <%- include('partials/modal-add-staff') %>
 
+  <script src="/js/api-service.js"></script>
+  <script src="/js/auth-service.js"></script>
+  <script src="/js/main.js"></script>
   <script>
+    // Update greeting with user's name
+    document.addEventListener('DOMContentLoaded', () => {
+      const userInfo = localStorage.getItem('user');
+      if (userInfo) {
+        try {
+          const user = JSON.parse(userInfo);
+          if (user.firstName) {
+            document.getElementById('greetingMessage').textContent = `Good Morning, ${user.firstName}!`;
+          }
+        } catch (e) {
+          console.log('Could not parse user info');
+        }
+      }
+    });
+
     function openAddStaffModal() {
       document.getElementById('add-staff-modal').classList.remove('hidden');
     }

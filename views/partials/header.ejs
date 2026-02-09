@@ -11,8 +11,66 @@
       <a class="text-slate-600 dark:text-slate-300 text-sm font-medium hover:text-primary dark:hover:text-primary transition-colors" href="#">Catalog</a>
       <a class="text-slate-600 dark:text-slate-300 text-sm font-medium hover:text-primary dark:hover:text-primary transition-colors" href="#">Help</a>
     </div>
-    <a href="/signup" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-9 px-4 bg-primary text-white text-sm font-bold hover:bg-blue-700 transition-colors">
-      <span class="truncate">Sign Up</span>
-    </a>
+    
+    <!-- Auth Section -->
+    <div id="authLinks" class="flex items-center gap-4">
+      <!-- Default: Not logged in -->
+      <a href="/signup" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-9 px-4 bg-primary text-white text-sm font-bold hover:bg-blue-700 transition-colors">
+        <span class="truncate">Sign Up</span>
+      </a>
+    </div>
   </div>
 </header>
+
+<script>
+// Update header when page loads
+document.addEventListener('DOMContentLoaded', () => {
+  updateHeaderUI();
+});
+
+function updateHeaderUI() {
+  const isAuth = authService.isAuthenticated();
+  const authLinks = document.getElementById('authLinks');
+  
+  if (isAuth) {
+    // Show logged-in UI with user name and logout
+    const user = authService.getUser();
+    let userName = 'User';
+    
+    // Try to get user name from localStorage
+    const userInfo = localStorage.getItem('user');
+    if (userInfo) {
+      try {
+        const parsedUser = JSON.parse(userInfo);
+        // Extract name from JWT if available
+        const token = localStorage.getItem('authToken');
+        if (token) {
+          const payload = token.split('.')[1];
+          const decoded = JSON.parse(atob(payload));
+          // If firstName is in decoded, use it; otherwise use a default
+          userName = decoded.firstName || 'User';
+        }
+      } catch (e) {
+        console.log('Could not parse user info');
+      }
+    }
+    
+    authLinks.innerHTML = `
+      <div class="flex items-center gap-3">
+        <span class="text-slate-700 dark:text-slate-300 text-sm font-medium">${userName}</span>
+        <button onclick="handleLogout()" class="flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary transition-colors cursor-pointer" title="Logout">
+          <span class="material-symbols-outlined">logout</span>
+        </button>
+      </div>
+    `;
+  } else {
+    // Show login/signup UI
+    authLinks.innerHTML = `
+      <a href="/login" class="text-slate-600 dark:text-slate-300 text-sm font-medium hover:text-primary dark:hover:text-primary transition-colors">Login</a>
+      <a href="/signup" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-9 px-4 bg-primary text-white text-sm font-bold hover:bg-blue-700 transition-colors">
+        <span class="truncate">Sign Up</span>
+      </a>
+    `;
+  }
+}
+</script>

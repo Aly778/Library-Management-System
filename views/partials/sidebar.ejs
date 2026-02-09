@@ -62,12 +62,32 @@
     <div class="flex items-center gap-3">
       <div class="size-10 rounded-full bg-cover bg-center" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC2svuVlw72LONQu40QxV8cAN6REfU4x0NEqqAsI7QQyaD0lkr4J3aLeHFdUaJf1in9eqVGGfcsVCOHFJOx6odIWIhWTkHT275-j9WV0j2kpU9IRR0CD6PPMn10GXWKV1F0WKfEV_D7i7ze16-LRz50ah1uSpfMhdU5EnC9YXWhwAElrHZ4J3CuWnaCYFdP7-CdEyzOm7LeCWXeeEt-25T0pZmRvB6c5qtnJqwqhuTMJQVcOrffBZEZNY3EdLgI4FLFuxu8VKDm8aU");'></div>
       <div class="flex-1 min-w-0">
-        <p class="text-sm font-medium text-slate-900 dark:text-white truncate">Tom Cook</p>
-        <p class="text-xs text-slate-500 dark:text-slate-400 truncate">Librarian Admin</p>
+        <p id="sidebarUserFirstName" class="text-sm font-medium text-slate-900 dark:text-white truncate">User</p>
+        <p id="sidebarUserLastName" class="text-xs text-slate-500 dark:text-slate-400 truncate">Name</p>
       </div>
-      <button class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+      <button onclick="handleLogout()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200" title="Logout">
         <span class="material-symbols-outlined text-[20px]">logout</span>
       </button>
     </div>
   </div>
 </aside>
+
+<script>
+// Update sidebar user info
+document.addEventListener('DOMContentLoaded', () => {
+  const userInfo = localStorage.getItem('user');
+  if (userInfo) {
+    try {
+      const user = JSON.parse(userInfo);
+      if (user.firstName) {
+        document.getElementById('sidebarUserFirstName').textContent = user.firstName;
+      }
+      if (user.lastName) {
+        document.getElementById('sidebarUserLastName').textContent = user.lastName;
+      }
+    } catch (e) {
+      console.log('Could not parse user info');
+    }
+  }
+});
+</script>

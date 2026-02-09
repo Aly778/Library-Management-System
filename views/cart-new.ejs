@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html class="light dark" lang="en">
+<head>
+  <%- include('partials/head', { title: 'Shopping Cart' }) %>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display antialiased h-screen flex overflow-hidden">
+
+  <!-- Sidebar -->
+  <%- include('partials/sidebar') %>
+
+  <!-- Main Content -->
+  <div class="flex-1 flex flex-col h-full overflow-hidden relative">
+    <!-- Top Bar -->
+    <header class="h-16 bg-white dark:bg-[#1a2230] border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-8 flex-shrink-0 z-10">
+      <h1 class="text-2xl font-bold">Shopping Cart</h1>
+      <a href="/catalog" class="text-primary hover:underline">Continue Shopping</a>
+    </header>
+
+    <main class="flex-1 overflow-y-auto p-8">
+      <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- Cart Items -->
+        <div class="lg:col-span-2">
+          <div id="cartItems" class="bg-white dark:bg-[#1a2230] rounded-lg shadow-sm border border-slate-200 dark:border-slate-800">
+            <!-- Items will be loaded here -->
+            <div class="p-8 text-center">
+              <span class="material-symbols-outlined text-6xl text-slate-400 block mb-4">shopping_bag</span>
+              <p class="text-slate-500 dark:text-slate-400">Your cart is empty</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="lg:col-span-1">
+          <div class="bg-white dark:bg-[#1a2230] rounded-lg shadow-sm border border-slate-200 dark:border-slate-800 p-6 sticky top-20">
+            <h2 class="text-xl font-bold mb-6">Order Summary</h2>
+            
+            <div class="space-y-4 mb-6 pb-6 border-b border-slate-200 dark:border-slate-800">
+              <div class="flex justify-between text-sm">
+                <span class="text-slate-600 dark:text-slate-400">Subtotal</span>
+                <span id="subtotal" class="font-medium">$0.00</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-slate-600 dark:text-slate-400">Tax (10%)</span>
+                <span id="tax" class="font-medium">$0.00</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-slate-600 dark:text-slate-400">Shipping</span>
+                <span id="shipping" class="font-medium">$0.00</span>
+              </div>
+            </div>
+
+            <div class="flex justify-between text-lg font-bold mb-6">
+              <span>Total</span>
+              <span id="total" class="text-primary">$0.00</span>
+            </div>
+
+            <button onclick="proceedToCheckout()" class="w-full bg-primary hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-colors mb-3">
+              Proceed to Checkout
+            </button>
+
+            <button onclick="clearCart()" class="w-full bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-900 dark:text-white font-bold py-3 px-4 rounded-lg transition-colors">
+              Clear Cart
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <%- include('partials/footer') %>
+
+  <script src="/js/api-service.js"></script>
+  <script src="/js/auth-service.js"></script>
+  <script src="/js/cart-service.js"></script>
+  <script src="/js/main.js"></script>
+
+  <script>
+    function renderCartItems() {
+      const container = document.getElementById('cartItems');
+      const items = cartService.getItems();
+
+      if (items.length === 0) {
+        container.innerHTML = `
+          <div class="p-8 text-center">
+            <span class="material-symbols-outlined text-6xl text-slate-400 block mb-4">shopping_bag</span>
+            <p class="text-slate-500 dark:text-slate-400">Your cart is empty</p>
+          </div>
+        `;
+        updateOrderSummary();
+        return;
+      }
+
+      container.innerHTML = `
+        <table class="w-full">
+          <thead class="border-b border-slate-200 dark:border-slate-800">
+            <tr>
+              <th class="text-left p-4 font-bold">Product</th>
+              <th class="text-center p-4 font-bold">Price</th>
+              <th class="text-center p-4 font-bold">Quantity</th>
+              <th class="text-right p-4 font-bold">Subtotal</th>
+              <th class="text-center p-4 font-bold">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${items.map(item => `
+              <tr class="border-b border-slate-100 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                <td class="p-4">
+                  <div class="font-medium">${item.Bname}</div>
+                </td>
+                <td class="p-4 text-center">$${item.Bprice.toFixed(2)}</td>
+                <td class="p-4 text-center">
+                  <input type="number" min="1" value="${item.quantity}" 
+                    onchange="cartService.updateQuantity(${item.Bid}, this.value); renderCartItems();"
+                    class="w-16 px-2 py-1 text-center border border-slate-300 dark:border-slate-700 rounded bg-white dark:bg-slate-900"/>
+                </td>
+                <td class="p-4 text-right font-medium">$${(item.Bprice * item.quantity).toFixed(2)}</td>
+                <td class="p-4 text-center">
+                  <button onclick="cartService.removeItem(${item.Bid}); renderCartItems();" class="text-red-600 hover:text-red-700 text-sm font-medium">
+                    Remove
+                  </button>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+
+      updateOrderSummary();
+    }
+
+    function updateOrderSummary() {
+      const subtotal = cartService.getTotal();
+      const tax = subtotal * 0.1;
+      const shipping = subtotal > 0 ? 5 : 0;
+      const total = subtotal + tax + shipping;
+
+      document.getElementById('subtotal').textContent = '$' + subtotal.toFixed(2);
+      document.getElementById('tax').textContent = '$' + tax.toFixed(2);
+      document.getElementById('shipping').textContent = '$' + shipping.toFixed(2);
+      document.getElementById('total').textContent = '$' + total.toFixed(2);
+    }
+
+    async function proceedToCheckout() {
+      if (cartService.isEmpty()) {
+        showError('Cart is empty');
+        return;
+      }
+      window.location.href = '/checkout';
+    }
+
+    function clearCart() {
+      if (confirm('Are you sure you want to clear your cart?')) {
+        cartService.clear();
+        renderCartItems();
+        showSuccess('Cart cleared');
+      }
+    }
+
+    // Initial load
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!authService.isAuthenticated()) {
+        window.location.href = '/login';
+        return;
+      }
+      renderCartItems();
+    });
+  </script>
+</body>
+</html>

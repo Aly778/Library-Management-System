@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html class="light dark" lang="en">
+<head>
+  <%- include('partials/head', { title: 'History' }) %>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display antialiased h-screen flex overflow-hidden">
+
+  <!-- Sidebar -->
+  <%- include('partials/sidebar') %>
+
+  <!-- Main Content -->
+  <div class="flex-1 flex flex-col h-full overflow-hidden relative">
+    <!-- Top Bar -->
+    <header class="h-16 bg-white dark:bg-[#1a2230] border-b border-slate-200 dark:border-slate-800 flex items-center px-8 flex-shrink-0 z-10">
+      <h1 class="text-2xl font-bold">History</h1>
+    </header>
+
+    <main class="flex-1 overflow-y-auto p-8">
+      <div class="max-w-6xl mx-auto">
+        <!-- Tabs -->
+        <div class="flex gap-4 mb-8 border-b border-slate-200 dark:border-slate-800">
+          <button onclick="switchTab('purchases')" class="px-6 py-3 border-b-2 border-primary text-primary font-medium" id="purchasesTab">
+            <span class="material-symbols-outlined align-middle mr-2">shopping_bag</span> Purchases
+          </button>
+          <button onclick="switchTab('borrows')" class="px-6 py-3 border-b-2 border-transparent text-slate-600 dark:text-slate-400 font-medium hover:border-slate-300 dark:hover:border-slate-700" id="borrowsTab">
+            <span class="material-symbols-outlined align-middle mr-2">library_books</span> Borrowing
+          </button>
+        </div>
+
+        <!-- Purchases Tab -->
+        <div id="purchasesContent" class="space-y-4">
+          <div id="purchasesContainer" class="bg-white dark:bg-[#1a2230] rounded-lg shadow-sm border border-slate-200 dark:border-slate-800">
+            <div class="p-8 text-center">
+              <span class="material-symbols-outlined text-6xl text-slate-400 block mb-4">hourglass_empty</span>
+              <p class="text-slate-500 dark:text-slate-400">Loading purchases...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Borrows Tab -->
+        <div id="borrowsContent" class="space-y-4 hidden">
+          <div id="borrowsContainer" class="bg-white dark:bg-[#1a2230] rounded-lg shadow-sm border border-slate-200 dark:border-slate-800">
+            <div class="p-8 text-center">
+              <span class="material-symbols-outlined text-6xl text-slate-400 block mb-4">hourglass_empty</span>
+              <p class="text-slate-500 dark:text-slate-400">Loading borrows...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <%- include('partials/footer') %>
+
+  <script src="/js/api-service.js"></script>
+  <script src="/js/auth-service.js"></script>
+  <script src="/js/main.js"></script>
+
+  <script>
+    async function loadPurchases() {
+      try {
+        const response = await apiService.getPurchaseHistory();
+        if (response.success) {
+          renderPurchases(response.purchases);
+        } else {
+          showError('Failed to load purchases');
+        }
+      } catch (error) {
+        showError('Error: ' + error.message);
+      }
+    }
+
+    async function loadBorrows() {
+      try {
+        const response = await apiService.getBorrowHistory();
+        if (response.success) {
+          renderBorrows(response.borrows);
+        } else {
+          showError('Failed to load borrows');
+        }
+      } catch (error) {
+        showError('Error: ' + error.message);
+      }
+    }
+
+    function renderPurchases(purchases) {
+      const container = document.getElementById('purchasesContainer');
+      
+      if (!purchases || purchases.length === 0) {
+        container.innerHTML = `
+          <div class="p-8 text-center">
+            <span class="material-symbols-outlined text-6xl text-slate-400 block mb-4">shopping_bag</span>
+            <p class="text-slate-500 dark:text-slate-400">No purchases yet</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = `
+        <table class="w-full">
+          <thead class="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/30">
+            <tr>
+              <th class="text-left p-4 font-bold">Book</th>
+              <th class="text-center p-4 font-bold">Price</th>
+              <th class="text-center p-4 font-bold">Quantity</th>
+              <th class="text-right p-4 font-bold">Total</th>
+              <th class="text-right p-4 font-bold">Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${purchases.map(p => `
+              <tr class="border-b border-slate-100 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                <td class="p-4">
+                  <div class="font-medium">${p.Bname}</div>
+                  <div class="text-sm text-slate-500 dark:text-slate-400">${p.BAuthor || 'Unknown'}</div>
+                </td>
+                <td class="p-4 text-center">$${parseFloat(p.Pprice).toFixed(2)}</td>
+                <td class="p-4 text-center">${p.Pquantity}</td>
+                <td class="p-4 text-right font-medium">$${(parseFloat(p.Pprice) * p.Pquantity).toFixed(2)}</td>
+                <td class="p-4 text-right text-sm">${new Date(p.Pdate).toLocaleDateString()}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+    }
+
+    function renderBorrows(borrows) {
+      const container = document.getElementById('borrowsContainer');
+      
+      if (!borrows || borrows.length === 0) {
+        container.innerHTML = `
+          <div class="p-8 text-center">
+            <span class="material-symbols-outlined text-6xl text-slate-400 block mb-4">library_books</span>
+            <p class="text-slate-500 dark:text-slate-400">No borrowing history</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = `
+        <table class="w-full">
+          <thead class="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/30">
+            <tr>
+              <th class="text-left p-4 font-bold">Book</th>
+              <th class="text-center p-4 font-bold">Borrow Date</th>
+              <th class="text-center p-4 font-bold">Return Date</th>
+              <th class="text-center p-4 font-bold">Status</th>
+              <th class="text-center p-4 font-bold">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${borrows.map(b => {
+              const isActive = b.borrow_status === 'Borrowed';
+              const statusColor = b.borrow_status === 'Returned' ? 'green' : b.borrow_status === 'Overdue' ? 'red' : 'blue';
+              return `
+              <tr class="border-b border-slate-100 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                <td class="p-4">
+                  <div class="font-medium">${b.Bname}</div>
+                  <div class="text-sm text-slate-500 dark:text-slate-400">${b.BAuthor || 'Unknown'}</div>
+                </td>
+                <td class="p-4 text-center">${new Date(b.borrow_date).toLocaleDateString()}</td>
+                <td class="p-4 text-center">${new Date(b.exp_date).toLocaleDateString()}</td>
+                <td class="p-4 text-center">
+                  <span class="px-3 py-1 rounded-full text-xs font-bold bg-${statusColor}-100 text-${statusColor}-800">
+                    ${b.borrow_status}
+                  </span>
+                </td>
+                <td class="p-4 text-center">
+                  ${isActive ? `
+                    <button onclick="returnBook(${b.borrow_id})" class="text-primary hover:text-blue-700 text-sm font-medium">
+                      Return
+                    </button>
+                  ` : '-'}
+                </td>
+              </tr>
+            `;
+            }).join('')}
+          </tbody>
+        </table>
+      `;
+    }
+
+    function switchTab(tab) {
+      const purchasesContent = document.getElementById('purchasesContent');
+      const borrowsContent = document.getElementById('borrowsContent');
+      const purchasesTab = document.getElementById('purchasesTab');
+      const borrowsTab = document.getElementById('borrowsTab');
+
+      if (tab === 'purchases') {
+        purchasesContent.classList.remove('hidden');
+        borrowsContent.classList.add('hidden');
+        purchasesTab.classList.add('border-primary', 'text-primary');
+        purchasesTab.classList.remove('border-transparent', 'text-slate-600');
+        borrowsTab.classList.remove('border-primary', 'text-primary');
+        borrowsTab.classList.add('border-transparent', 'text-slate-600', 'dark:text-slate-400');
+      } else {
+        purchasesContent.classList.add('hidden');
+        borrowsContent.classList.remove('hidden');
+        purchasesTab.classList.remove('border-primary', 'text-primary');
+        purchasesTab.classList.add('border-transparent', 'text-slate-600');
+        borrowsTab.classList.add('border-primary', 'text-primary');
+        borrowsTab.classList.remove('border-transparent', 'text-slate-600', 'dark:text-slate-400');
+      }
+    }
+
+    async function returnBook(borrowId) {
+      try {
+        const response = await apiService.returnBook(borrowId);
+        if (response.success) {
+          showSuccess('Book returned successfully');
+          loadBorrows();
+        } else {
+          showError('Failed to return book');
+        }
+      } catch (error) {
+        showError('Error: ' + error.message);
+      }
+    }
+
+    // Initial load
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!authService.isAuthenticated()) {
+        window.location.href = '/login';
+        return;
+      }
+      loadPurchases();
+      loadBorrows();
+    });
+  </script>
+</body>
+</html>

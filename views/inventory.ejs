@@ -5,8 +5,10 @@
 </head>
 <body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display antialiased h-screen flex overflow-hidden">
 
-  <!-- Admin Sidebar -->
-  <%- include('partials/sidebar-admin') %>
+  <!-- Conditional Sidebar based on user role -->
+  <div id="sidebarContainer">
+    <!-- Sidebar will be loaded here via JavaScript -->
+  </div>
 
   <!-- Main Content -->
   <div class="flex-1 flex flex-col h-full overflow-hidden relative">
@@ -439,6 +441,125 @@
       if (e.key === 'Escape') {
         closeAddBookModal();
         closeEditBookModal();
+      }
+    });
+  </script>
+
+  <script src="/js/api-service.js"></script>
+  <script src="/js/auth-service.js"></script>
+  <script>
+    // Load appropriate sidebar based on user role
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = authService.getUser();
+      const sidebarContainer = document.getElementById('sidebarContainer');
+      
+      if (user && user.role === 'superAdmin') {
+        // Load dashboard sidebar for superAdmin
+        sidebarContainer.innerHTML = `
+          <aside class="h-full w-64 flex-shrink-0 border-r border-[#e2e8f0] dark:border-[#334155] bg-white dark:bg-[#1e293b] flex flex-col justify-between">
+            <div class="flex flex-col gap-6 p-4">
+              <!-- Logo -->
+              <div class="flex items-center gap-3 px-2">
+                <div class="flex items-center justify-center rounded-lg bg-[#1e3a8a] text-white size-10 shadow-md">
+                  <span class="material-symbols-outlined">local_library</span>
+                </div>
+                <div class="flex flex-col">
+                  <h1 class="text-[#1e3a8a] dark:text-white text-lg font-bold leading-tight">LibAdmin</h1>
+                  <p class="text-[#64748b] dark:text-[#94a3b8] text-xs font-normal">Management System</p>
+                </div>
+              </div>
+
+              <!-- Navigation -->
+              <nav class="flex flex-col gap-1">
+                <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#64748b] dark:text-[#94a3b8] hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group" href="/dashboard">
+                  <span class="material-symbols-outlined text-[24px]">dashboard</span>
+                  <span class="text-sm font-medium group-hover:text-[#1e293b] dark:group-hover:text-white">Dashboard</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-[#1e3a8a]/10 text-[#1e3a8a] dark:bg-[#1e3a8a]/20 dark:text-blue-300 group" href="/inventory">
+                  <span class="material-symbols-outlined text-[24px]">menu_book</span>
+                  <span class="text-sm font-medium">Inventory</span>
+                </a>
+              </nav>
+            </div>
+
+            <!-- Bottom Section with user info and logout -->
+            <div class="p-4 border-t border-[#e2e8f0] dark:border-[#334155]">
+              <div class="flex items-center gap-3 px-3 py-2 justify-between">
+                <div class="flex items-center gap-3 overflow-hidden flex-1">
+                  <div class="bg-center bg-no-repeat bg-cover rounded-full size-9 border border-[#e2e8f0] dark:border-[#334155]" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCSEABfDP0NX7x2Xu6ZBjx8wgxEGapZ8Vj9RSvx_MPA50__Kr8Qbq6o4SwqqayF2v1x-1Z9BANEyv28rRzFndjDtOKXmTBZ-UECFg7F4r2kLXnLT8AJqC2SZ30U2nAv5NSWLzDb_WSWo53WJ7hCuqaq299kqBzFIBBuEp7A6xs8-FuT757qIWKw0Z85ym1ylifPmnbiALXggpUww6EgdJMWke2DcSaA95Z90nBamgUdIkTXIjOJmkK-iSx2R041fclBF0TMsh5Xg2Y");'></div>
+                  <div class="flex flex-col overflow-hidden flex-1">
+                    <p id="sidebarUserFirstName" class="text-[#1e293b] dark:text-[#f8fafc] text-sm font-medium truncate">User</p>
+                    <p id="sidebarUserLastName" class="text-[#64748b] dark:text-[#94a3b8] text-xs truncate">Name</p>
+                  </div>
+                </div>
+                <button onclick="handleLogout()" class="flex items-center justify-center p-1 text-[#64748b] dark:text-[#94a3b8] hover:text-[#1e3a8a] dark:hover:text-blue-400 transition-colors" title="Logout">
+                  <span class="material-symbols-outlined">logout</span>
+                </button>
+              </div>
+            </div>
+          </aside>
+        `;
+        
+        // Update user name in sidebar
+        const userInfo = localStorage.getItem('user');
+        if (userInfo) {
+          try {
+            const userData = JSON.parse(userInfo);
+            document.getElementById('sidebarUserFirstName').textContent = userData.firstName || 'User';
+            document.getElementById('sidebarUserLastName').textContent = userData.lastName || 'Name';
+          } catch (e) {}
+        }
+      } else {
+        // Load admin sidebar for regular admin
+        sidebarContainer.innerHTML = `
+          <aside class="h-full w-72 bg-white dark:bg-[#1a2230] border-r border-slate-200 dark:border-slate-800 flex flex-col flex-shrink-0 z-20">
+            <!-- Logo -->
+            <div class="h-16 flex items-center px-6 border-b border-slate-200 dark:border-slate-800 gap-3">
+              <div class="size-8 text-primary">
+                <svg fill="currentColor" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M24 4C25.7818 14.2173 33.7827 22.2182 44 24C33.7827 25.7818 25.7818 33.7827 24 44C22.2182 33.7827 14.2173 25.7818 4 24C14.2173 22.2182 22.2182 14.2173 24 4Z"></path>
+                </svg>
+              </div>
+              <h2 class="text-lg font-bold tracking-tight text-slate-900 dark:text-white">Library Manager</h2>
+            </div>
+
+            <!-- Navigation -->
+            <div class="flex-1 overflow-y-auto py-6 px-4">
+              <!-- Management -->
+              <div>
+                <h3 class="px-2 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Management</h3>
+                <nav class="space-y-1">
+                  <button class="w-full flex items-center justify-between px-3 py-2 text-slate-900 dark:text-white bg-slate-100 dark:bg-slate-800 rounded-lg">
+                    <span class="text-sm font-medium">All Books</span>
+                    <span class="text-xs bg-white dark:bg-slate-700 px-2 py-0.5 rounded-full text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-600">8</span>
+                  </button>
+                  <button class="w-full flex items-center justify-between px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 rounded-lg group">
+                    <span class="text-sm font-medium">Low Stock</span>
+                    <span class="text-xs text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300">2</span>
+                  </button>
+                  <button class="w-full flex items-center justify-between px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 rounded-lg group">
+                    <span class="text-sm font-medium">Out of Stock</span>
+                    <span class="text-xs text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300">0</span>
+                  </button>
+                </nav>
+              </div>
+            </div>
+
+            <!-- User Profile -->
+            <div class="p-4 border-t border-slate-200 dark:border-slate-800">
+              <div class="flex items-center gap-3">
+                <div class="size-10 rounded-full bg-cover bg-center" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC2svuVlw72LONQu40QxV8cAN6REfU4x0NEqqAsI7QQyaD0lkr4J3aLeHFdUaJf1in9eqVGGfcsVCOHFJOx6odIWIhWTkHT275-j9WV0j2kpU9IRR0CD6PPMn10GXWKV1F0WKfEV_D7i7ze16-LRz50ah1uSpfMhdU5EnC9YXWhwAElrHZ4J3CuWnaCYFdP7-CdEyzOm7LeCWXeeEt-25T0pZmRvB6c5qtnJqwqhuTMJQVcOrffBZEZNY3EdLgI4FLFuxu8VKDm8aU");'></div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-medium text-slate-900 dark:text-white truncate">Admin User</p>
+                  <p class="text-xs text-slate-500 dark:text-slate-400 truncate">Librarian Admin</p>
+                </div>
+                <button onclick="handleLogout()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                  <span class="material-symbols-outlined text-[20px]">logout</span>
+                </button>
+              </div>
+            </div>
+          </aside>
+        `;
       }
     });
   </script>

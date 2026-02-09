@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html class="light dark" lang="en">
+<head>
+  <%- include('partials/head', { title: 'Book Catalog' }) %>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display antialiased h-screen flex overflow-hidden">
+
+  <!-- Sidebar -->
+  <%- include('partials/sidebar') %>
+
+  <!-- Main Content -->
+  <div class="flex-1 flex flex-col h-full overflow-hidden relative">
+    <!-- Top Bar -->
+    <header class="h-16 bg-white dark:bg-[#1a2230] border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-8 flex-shrink-0 z-10">
+      <h1 class="text-2xl font-bold">Book Catalog</h1>
+      <div class="flex items-center gap-4">
+        <a href="/cart" class="relative">
+          <span class="material-symbols-outlined text-2xl hover:text-primary transition-colors">shopping_cart</span>
+          <span id="cartCount" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
+        </a>
+      </div>
+    </header>
+
+    <main class="flex-1 overflow-y-auto p-8">
+      <div class="max-w-7xl mx-auto flex flex-col gap-8">
+        <!-- Search and Filter Bar -->
+        <div class="bg-white dark:bg-[#1a2230] p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800">
+          <div class="flex flex-col lg:flex-row gap-4">
+            <div class="flex-1 relative group">
+              <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <span class="material-symbols-outlined text-slate-400">search</span>
+              </span>
+              <input id="searchInput" 
+                class="block w-full pl-10 pr-3 py-2.5 rounded-lg bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/50 text-sm" 
+                placeholder="Search books..." type="text"/>
+            </div>
+            
+            <select id="categoryFilter" class="px-4 py-2.5 rounded-lg bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/50 text-sm">
+              <option value="">All Categories</option>
+            </select>
+
+            <button onclick="loadCatalog()" class="px-6 py-2.5 bg-primary hover:bg-blue-700 text-white rounded-lg font-medium transition-colors">
+              <span class="material-symbols-outlined align-middle mr-2">refresh</span> Refresh
+            </button>
+          </div>
+        </div>
+
+        <!-- Books Grid -->
+        <div id="booksContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <!-- Books will be loaded here -->
+          <div class="col-span-full text-center py-12">
+            <span class="material-symbols-outlined text-6xl text-slate-400 block mb-4">hourglass_empty</span>
+            <p class="text-slate-500 dark:text-slate-400">Loading books...</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <%- include('partials/footer') %>
+
+  <script src="/js/api-service.js"></script>
+  <script src="/js/auth-service.js"></script>
+  <script src="/js/cart-service.js"></script>
+  <script src="/js/catalog-manager.js"></script>
+  <script src="/js/main.js"></script>
+
+  <script>
+    let apiService = new ApiService();
+
+    async function loadCatalog() {
+      try {
+        // Load books
+        const booksResponse = await apiService.getBooks();
+        if (booksResponse.success) {
+          catalogManager.books = booksResponse.books;
+          catalogManager.filteredBooks = booksResponse.books;
+          renderBooks();
+        }
+
+        // Load categories
+        const categoriesResponse = await apiService.getCategories();
+        if (categoriesResponse.success) {
+          catalogManager.categories = categoriesResponse.categories;
+          populateCategories();
+        }
+      } catch (error) {
+        showError('Failed to load catalog: ' + error.message);
+      }
+    }
+
+    function renderBooks() {
+      const container = document.getElementById('booksContainer');
+      if (catalogManager.filteredBooks.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full text-center py-12">
+            <span class="material-symbols-outlined text-6xl text-slate-400 block mb-4">search_off</span>
+            <p class="text-slate-500 dark:text-slate-400">No books found</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = catalogManager.filteredBooks.map(book => catalogManager.renderBookCard(book)).join('');
+    }
+
+    function populateCategories() {
+      const select = document.getElementById('categoryFilter');
+      catalogManager.categories.forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat.Cid;
+        option.textContent = cat.Cname;
+        select.appendChild(option);
+      });
+    }
+
+    // Event listeners
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      catalogManager.searchBooks(e.target.value);
+      renderBooks();
+    });
+
+    document.getElementById('categoryFilter').addEventListener('change', (e) => {
+      catalogManager.filterByCategory(e.target.value);
+      renderBooks();
+    });
+
+    // Update cart count
+    function updateCartCount() {
+      document.getElementById('cartCount').textContent = cartService.getItemCount();
+    }
+
+    // Initial load
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!authService.isAuthenticated()) {
+        window.location.href = '/login';
+        return;
+      }
+      loadCatalog();
+      updateCartCount();
+      cartService.cart = cartService.loadCart();
+    });
+
+    // Update cart count whenever it changes
+    const originalAddItem = cartService.addItem.bind(cartService);
+    cartService.addItem = function(...args) {
+      originalAddItem(...args);
+      updateCartCount();
+    };
+  </script>
+</body>
+</html>

@@ -25,24 +25,24 @@
           <p class="text-slate-400 text-sm">Join the library to access our complete catalog.</p>
         </div>
 
-        <form class="space-y-4">
+        <form class="space-y-4" id="signupForm">
           <div class="grid grid-cols-2 gap-4">
             <div class="space-y-2">
-              <label class="text-sm font-medium text-slate-200" for="firstname">First Name</label>
+              <label class="text-sm font-medium text-slate-200" for="firstName">First Name</label>
               <div class="relative">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
                   <span class="material-symbols-outlined text-[20px]">person</span>
                 </div>
-                <input class="form-input w-full rounded-lg border-slate-700 bg-slate-800 text-white pl-10 pr-4 py-2.5 focus:border-primary focus:ring-1 focus:ring-primary placeholder:text-slate-500 text-sm transition-all" id="firstname" placeholder="John" type="text"/>
+                <input class="form-input w-full rounded-lg border-slate-700 bg-slate-800 text-white pl-10 pr-4 py-2.5 focus:border-primary focus:ring-1 focus:ring-primary placeholder:text-slate-500 text-sm transition-all" id="firstName" placeholder="John" type="text" required/>
               </div>
             </div>
             <div class="space-y-2">
-              <label class="text-sm font-medium text-slate-200" for="lastname">Last Name</label>
+              <label class="text-sm font-medium text-slate-200" for="lastName">Last Name</label>
               <div class="relative">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
                   <span class="material-symbols-outlined text-[20px]">person</span>
                 </div>
-                <input class="form-input w-full rounded-lg border-slate-700 bg-slate-800 text-white pl-10 pr-4 py-2.5 focus:border-primary focus:ring-1 focus:ring-primary placeholder:text-slate-500 text-sm transition-all" id="lastname" placeholder="Doe" type="text"/>
+                <input class="form-input w-full rounded-lg border-slate-700 bg-slate-800 text-white pl-10 pr-4 py-2.5 focus:border-primary focus:ring-1 focus:ring-primary placeholder:text-slate-500 text-sm transition-all" id="lastName" placeholder="Doe" type="text" required/>
               </div>
             </div>
           </div>
@@ -53,7 +53,41 @@
               <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
                 <span class="material-symbols-outlined text-[20px]">mail</span>
               </div>
-              <input class="form-input w-full rounded-lg border-slate-700 bg-slate-800 text-white pl-10 pr-4 py-2.5 focus:border-primary focus:ring-1 focus:ring-primary placeholder:text-slate-500 text-sm transition-all" id="email" placeholder="patron@library.edu" type="email"/>
+              <input class="form-input w-full rounded-lg border-slate-700 bg-slate-800 text-white pl-10 pr-4 py-2.5 focus:border-primary focus:ring-1 focus:ring-primary placeholder:text-slate-500 text-sm transition-all" id="email" placeholder="patron@library.edu" type="email" required/>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <label class="text-sm font-medium text-slate-200" for="phoneNumber">Phone Number</label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
+                <span class="material-symbols-outlined text-[20px]">phone</span>
+              </div>
+              <input class="form-input w-full rounded-lg border-slate-700 bg-slate-800 text-white pl-10 pr-4 py-2.5 focus:border-primary focus:ring-1 focus:ring-primary placeholder:text-slate-500 text-sm transition-all" id="phoneNumber" placeholder="+1234567890" type="tel"/>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <label class="text-sm font-medium text-slate-200" for="dob">Date of Birth</label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
+                <span class="material-symbols-outlined text-[20px]">calendar_today</span>
+              </div>
+              <input class="form-input w-full rounded-lg border-slate-700 bg-slate-800 text-white pl-10 pr-4 py-2.5 focus:border-primary focus:ring-1 focus:ring-primary placeholder:text-slate-500 text-sm transition-all" id="dob" type="date"/>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <label class="text-sm font-medium text-slate-200" for="gender">Gender</label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
+                <span class="material-symbols-outlined text-[20px]">wc</span>
+              </div>
+              <select class="form-input w-full rounded-lg border-slate-700 bg-slate-800 text-white pl-10 pr-4 py-2.5 focus:border-primary focus:ring-1 focus:ring-primary text-sm transition-all" id="gender" required>
+                <option value="">Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+              </select>
             </div>
           </div>
 
@@ -63,21 +97,21 @@
               <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
                 <span class="material-symbols-outlined text-[20px]">lock</span>
               </div>
-              <input class="form-input w-full rounded-lg border-slate-700 bg-slate-800 text-white pl-10 pr-4 py-2.5 focus:border-primary focus:ring-1 focus:ring-primary placeholder:text-slate-500 text-sm transition-all" id="password" placeholder="••••••••" type="password"/>
+              <input class="form-input w-full rounded-lg border-slate-700 bg-slate-800 text-white pl-10 pr-4 py-2.5 focus:border-primary focus:ring-1 focus:ring-primary placeholder:text-slate-500 text-sm transition-all" id="password" placeholder="••••••••" type="password" required/>
             </div>
           </div>
 
           <div class="space-y-2">
-            <label class="text-sm font-medium text-slate-200" for="confirm_password">Confirm Password</label>
+            <label class="text-sm font-medium text-slate-200" for="confirmPassword">Confirm Password</label>
             <div class="relative">
               <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
                 <span class="material-symbols-outlined text-[20px]">check_circle</span>
               </div>
-              <input class="form-input w-full rounded-lg border-slate-700 bg-slate-800 text-white pl-10 pr-4 py-2.5 focus:border-primary focus:ring-1 focus:ring-primary placeholder:text-slate-500 text-sm transition-all" id="confirm_password" placeholder="••••••••" type="password"/>
+              <input class="form-input w-full rounded-lg border-slate-700 bg-slate-800 text-white pl-10 pr-4 py-2.5 focus:border-primary focus:ring-1 focus:ring-primary placeholder:text-slate-500 text-sm transition-all" id="confirmPassword" placeholder="••••••••" type="password" required/>
             </div>
           </div>
 
-          <button class="w-full flex justify-center items-center gap-2 bg-primary hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary mt-4" type="button">
+          <button class="w-full flex justify-center items-center gap-2 bg-primary hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary mt-4" type="submit">
             Sign Up
           </button>
         </form>
@@ -94,5 +128,70 @@
 
   <%- include('partials/footer') %>
 
+  <script src="/js/api-service.js"></script>
+  <script src="/js/auth-service.js"></script>
+  <script src="/js/main.js"></script>
+  <script>
+    // Validate phone number: exactly 11 digits, no letters, spaces are OK
+    function validatePhoneNumber(phoneNumber) {
+      if (!phoneNumber || phoneNumber.trim() === '') {
+        return { valid: true, message: '' }; // Optional field
+      }
+      
+      // Remove spaces
+      const cleanedNumber = phoneNumber.replace(/\s/g, '');
+      
+      // Check if it contains only digits and has exactly 11 digits
+      if (!/^\d{11}$/.test(cleanedNumber)) {
+        return { valid: false, message: 'Enter 11 numbers only' };
+      }
+      
+      return { valid: true, message: '', cleaned: cleanedNumber };
+    }
+
+    document.getElementById('signupForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      
+      if (password !== confirmPassword) {
+        showError('Passwords do not match!');
+        return;
+      }
+
+      const phoneNumber = document.getElementById('phoneNumber').value;
+      const phoneValidation = validatePhoneNumber(phoneNumber);
+      
+      if (!phoneValidation.valid) {
+        showError(phoneValidation.message);
+        return;
+      }
+
+      const userData = {
+        firstName: document.getElementById('firstName').value,
+        lastName: document.getElementById('lastName').value,
+        email: document.getElementById('email').value,
+        password: password,
+        phoneNumber: phoneValidation.cleaned || null,
+        dob: document.getElementById('dob').value || null,
+        gender: document.getElementById('gender').value
+      };
+      
+      try {
+        const result = await authService.register(userData);
+        if (result.success) {
+          showSuccess('Account created successfully! Redirecting to login...');
+          setTimeout(() => {
+            window.location.href = '/login';
+          }, 1500);
+        } else {
+          showError(result.message || 'Registration failed');
+        }
+      } catch (error) {
+        showError('Registration failed. Please try again.');
+      }
+    });
+  </script>
 </body>
 </html>
