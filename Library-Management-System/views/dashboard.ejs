@@ -1,238 +1,231 @@
 <!DOCTYPE html>
-<html class="light dark" lang="en">
+<html class="dark" lang="en">
 <head>
-  <%- include('partials/head', { title: 'Admin Dashboard' }) %>
-  <style>
-    :root {
-      --primary-dashboard: #1e3a8a;
+  <%- include('partials/head', { title: 'LibAdmin Dashboard' }) %>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#3b82f6',
+            background: { light: '#f8fafc', dark: '#0f172a' }
+          }
+        }
+      }
     }
-  </style>
+  </script>
 </head>
-<body class="bg-[#fdfbf7] dark:bg-[#0f172a] font-display text-[#1e293b] dark:text-[#f8fafc] antialiased overflow-hidden">
+<body class="bg-[#0f172a] font-display text-slate-900 dark:text-slate-100 antialiased h-screen flex overflow-hidden">
 
-  <div class="flex h-screen w-full overflow-hidden">
+  <%- include('partials/sidebar-dashboard') %>
 
-    <!-- Dashboard Sidebar -->
-    <%- include('partials/sidebar-dashboard') %>
+  <div class="flex-1 flex flex-col h-full relative overflow-hidden">
+    
+    <header class="h-16 bg-white dark:bg-[#1a2230] border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-8 shrink-0 z-10">
+      <h1 class="text-2xl font-bold">System Dashboard</h1>
+    </header>
 
-    <!-- Main Content -->
-    <main class="flex-1 flex flex-col h-full overflow-hidden relative">
-      <!-- Top Bar -->
-      <header class="h-16 flex items-center justify-between px-6 border-b border-[#e2e8f0] dark:border-[#334155] bg-white dark:bg-[#1e293b] shrink-0">
-        <div class="flex items-center gap-4">
-          <button class="lg:hidden p-2 -ml-2 text-[#64748b] dark:text-[#94a3b8]">
-            <span class="material-symbols-outlined">menu</span>
-          </button>
-          <h2 class="text-xl font-bold text-[#1e293b] dark:text-[#f8fafc]">Dashboard Overview</h2>
+    <main class="flex-1 overflow-y-auto p-8 scroll-smooth">
+      <div class="max-w-7xl mx-auto flex flex-col gap-8 min-h-full pb-12">
+        
+        <div class="flex flex-col gap-1">
+          <h3 id="greetingMessage" class="text-2xl font-bold text-white">Welcome Back!</h3>
+          <p class="text-slate-400">Actual system performance and personnel management metrics.</p>
         </div>
-        <div class="flex items-center gap-4">
-          <button class="flex items-center gap-2 bg-[#1e3a8a] hover:bg-blue-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
-            <span class="material-symbols-outlined text-[20px]">add</span>
-            <span class="hidden sm:inline">Add Book</span>
-          </button>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="bg-white dark:bg-[#1a2230] p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800">
+            <h4 class="text-slate-400 text-sm font-medium mb-1">Actual Total Books</h4>
+            <p id="statTotalBooks" class="text-3xl font-bold text-white">0</p>
+          </div>
+          <div class="bg-white dark:bg-[#1a2230] p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800">
+            <h4 class="text-slate-400 text-sm font-medium mb-1">Purchasing Customers</h4>
+            <p id="statTotalCustomers" class="text-3xl font-bold text-white">0</p>
+          </div>
+          <div class="bg-white dark:bg-[#1a2230] p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800">
+            <h4 class="text-slate-400 text-sm font-medium mb-1">Actual Total Sales</h4>
+            <p id="statTotalSold" class="text-3xl font-bold text-primary">0</p>
+          </div>
         </div>
-      </header>
 
-      <!-- Scrollable Content -->
-      <div class="flex-1 overflow-y-auto bg-[#fdfbf7] dark:bg-[#0f172a] p-6">
-        <div class="max-w-7xl mx-auto flex flex-col gap-6">
-
-          <!-- Greeting -->
-          <div class="flex flex-col gap-1">
-            <h3 id="greetingMessage" class="text-2xl font-bold text-[#1e293b] dark:text-[#f8fafc]">Good Morning, User!</h3>
-            <p class="text-[#64748b] dark:text-[#94a3b8]">Here's what's happening in the library today.</p>
+        <div class="bg-white dark:bg-[#1a2230] p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <h3 class="text-lg font-bold mb-6 text-white">Personnel Management</h3>
+          <div class="flex flex-wrap gap-4">
+            <button onclick="openModal('add-employee-modal')" class="bg-primary hover:bg-blue-600 text-white px-6 py-3 rounded-xl text-sm font-bold flex items-center gap-2 transition-all active:scale-95 shadow-lg shadow-blue-500/20">
+              <span class="material-symbols-outlined">person_add</span> Add Employee
+            </button>
+            <button onclick="openModal('remove-employee-modal')" class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl text-sm font-bold flex items-center gap-2 transition-all active:scale-95">
+              <span class="material-symbols-outlined">person_remove</span> Remove Employee
+            </button>
+            <button onclick="loadEmployees()" class="border border-slate-700 hover:bg-slate-800 text-white px-6 py-3 rounded-xl text-sm font-bold flex items-center gap-2 transition-all">
+              <span class="material-symbols-outlined">group</span> View All Employees
+            </button>
           </div>
+        </div>
 
-          <!-- Stats Cards -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <!-- Total Books -->
-            <div class="bg-white dark:bg-[#1e293b] p-5 rounded-xl border border-[#e2e8f0] dark:border-[#334155] shadow-sm">
-              <div class="flex justify-between items-start mb-4">
-                <div class="p-2 bg-blue-50 dark:bg-blue-900/30 rounded-lg text-[#1e3a8a] dark:text-blue-400">
-                  <span class="material-symbols-outlined">library_books</span>
-                </div>
-                <span class="flex items-center gap-1 text-xs font-medium text-green-600 bg-green-50 dark:bg-green-900/20 px-2 py-1 rounded-full">
-                  <span class="material-symbols-outlined text-[14px]">trending_up</span> +5.2%
-                </span>
-              </div>
-              <h4 class="text-[#64748b] dark:text-[#94a3b8] text-sm font-medium mb-1">Total Books</h4>
-              <p class="text-2xl font-bold text-[#1e293b] dark:text-[#f8fafc]">12,450</p>
-            </div>
-
-            <!-- Total Customers -->
-            <div class="bg-white dark:bg-[#1e293b] p-5 rounded-xl border border-[#e2e8f0] dark:border-[#334155] shadow-sm">
-              <div class="flex justify-between items-start mb-4">
-                <div class="p-2 bg-amber-50 dark:bg-amber-900/30 rounded-lg text-amber-600 dark:text-amber-400">
-                  <span class="material-symbols-outlined">group</span>
-                </div>
-                <span class="flex items-center gap-1 text-xs font-medium text-green-600 bg-green-50 dark:bg-green-900/20 px-2 py-1 rounded-full">
-                  <span class="material-symbols-outlined text-[14px]">trending_up</span> +12%
-                </span>
-              </div>
-              <h4 class="text-[#64748b] dark:text-[#94a3b8] text-sm font-medium mb-1">Total Customers</h4>
-              <p class="text-2xl font-bold text-[#1e293b] dark:text-[#f8fafc]">3,200</p>
-            </div>
-
-            <!-- Books Sold -->
-            <div class="bg-white dark:bg-[#1e293b] p-5 rounded-xl border border-[#e2e8f0] dark:border-[#334155] shadow-sm">
-              <div class="flex justify-between items-start mb-4">
-                <div class="p-2 bg-emerald-50 dark:bg-emerald-900/30 rounded-lg text-emerald-600 dark:text-emerald-400">
-                  <span class="material-symbols-outlined">shopping_cart</span>
-                </div>
-                <span class="flex items-center gap-1 text-xs font-medium text-green-600 bg-green-50 dark:bg-green-900/20 px-2 py-1 rounded-full">
-                  <span class="material-symbols-outlined text-[14px]">trending_up</span> +8.4%
-                </span>
-              </div>
-              <h4 class="text-[#64748b] dark:text-[#94a3b8] text-sm font-medium mb-1">Books Sold</h4>
-              <p class="text-2xl font-bold text-[#1e293b] dark:text-[#f8fafc]">1,840</p>
-            </div>
-          </div>
-
-          <!-- Personnel Management -->
-          <div class="bg-white dark:bg-[#1e293b] p-6 rounded-xl border border-[#e2e8f0] dark:border-[#334155] shadow-sm">
-            <div class="mb-6">
-              <h3 class="text-lg font-bold text-[#1e293b] dark:text-[#f8fafc]">Personnel Management</h3>
-              <p class="text-sm text-[#64748b] dark:text-[#94a3b8]">Admin controls for staff and patrons</p>
-            </div>
-            <div class="flex flex-wrap gap-4">
-              <button onclick="openAddStaffModal()" class="flex items-center gap-2 bg-[#1e3a8a] hover:bg-blue-800 text-white px-6 py-3 rounded-lg text-sm font-semibold transition-colors shadow-sm">
-                <span class="material-symbols-outlined text-[20px]">person_add</span>
-                Add New Staff Member
-              </button>
-              <button class="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg text-sm font-semibold transition-colors shadow-sm">
-                <span class="material-symbols-outlined text-[20px]">person_remove</span>
-                Remove Staff Member
-              </button>
-              <button class="flex items-center gap-2 border border-[#e2e8f0] dark:border-[#334155] hover:bg-slate-100 dark:hover:bg-slate-800 text-[#1e293b] dark:text-[#f8fafc] px-6 py-3 rounded-lg text-sm font-semibold transition-colors">
-                <span class="material-symbols-outlined text-[20px]">visibility</span>
-                View All Library Users
-              </button>
-            </div>
-          </div>
-
-          <!-- Financial Overview -->
-          <div class="bg-white dark:bg-[#1e293b] rounded-xl border border-[#e2e8f0] dark:border-[#334155] shadow-sm flex flex-col overflow-hidden">
-            <div class="p-5 border-b border-[#e2e8f0] dark:border-[#334155] flex justify-between items-center">
-              <h3 class="text-lg font-bold text-[#1e293b] dark:text-[#f8fafc]">Financial Overview</h3>
-              <div class="flex gap-2">
-                <button class="text-sm text-[#64748b] dark:text-[#94a3b8] hover:text-[#1e3a8a] dark:hover:text-[#3b82f6] flex items-center gap-1 bg-[#fdfbf7] dark:bg-[#0f172a] px-3 py-1 rounded border border-[#e2e8f0] dark:border-[#334155]">
-                  This Month <span class="material-symbols-outlined text-[16px]">expand_more</span>
-                </button>
-              </div>
-            </div>
-            <div class="p-6">
-              <div class="w-full overflow-x-auto">
-                <table class="w-full text-left text-sm text-[#64748b] dark:text-[#94a3b8]">
-                  <thead class="bg-[#fdfbf7] dark:bg-slate-800/50 text-xs uppercase font-semibold text-[#1e293b] dark:text-[#f8fafc]">
-                    <tr>
-                      <th class="px-5 py-3 rounded-tl-lg">Transaction ID</th>
-                      <th class="px-5 py-3">Customer</th>
-                      <th class="px-5 py-3">Date</th>
-                      <th class="px-5 py-3">Items</th>
-                      <th class="px-5 py-3 text-right">Amount</th>
-                      <th class="px-5 py-3 text-right rounded-tr-lg">Status</th>
-                    </tr>
-                  </thead>
-                  <tbody class="divide-y divide-[#e2e8f0] dark:divide-[#334155]">
-                    <tr class="hover:bg-[#fdfbf7] dark:hover:bg-slate-800/30 transition-colors">
-                      <td class="px-5 py-3 font-medium text-[#1e293b] dark:text-[#f8fafc]">#TR-8842</td>
-                      <td class="px-5 py-3">James Smith</td>
-                      <td class="px-5 py-3">Oct 24, 2023</td>
-                      <td class="px-5 py-3">The Great Gatsby (Hardcover)</td>
-                      <td class="px-5 py-3 text-right font-semibold text-[#1e293b] dark:text-[#f8fafc]">$24.99</td>
-                      <td class="px-5 py-3 text-right">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">Completed</span>
-                      </td>
-                    </tr>
-                    <tr class="hover:bg-[#fdfbf7] dark:hover:bg-slate-800/30 transition-colors">
-                      <td class="px-5 py-3 font-medium text-[#1e293b] dark:text-[#f8fafc]">#TR-8841</td>
-                      <td class="px-5 py-3">Linda Ray</td>
-                      <td class="px-5 py-3">Oct 24, 2023</td>
-                      <td class="px-5 py-3">Data Science 101</td>
-                      <td class="px-5 py-3 text-right font-semibold text-[#1e293b] dark:text-[#f8fafc]">$45.00</td>
-                      <td class="px-5 py-3 text-right">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">Completed</span>
-                      </td>
-                    </tr>
-                    <tr class="hover:bg-[#fdfbf7] dark:hover:bg-slate-800/30 transition-colors">
-                      <td class="px-5 py-3 font-medium text-[#1e293b] dark:text-[#f8fafc]">#TR-8840</td>
-                      <td class="px-5 py-3">Robert Fox</td>
-                      <td class="px-5 py-3">Oct 23, 2023</td>
-                      <td class="px-5 py-3">The Alchemist, Design Patterns</td>
-                      <td class="px-5 py-3 text-right font-semibold text-[#1e293b] dark:text-[#f8fafc]">$62.50</td>
-                      <td class="px-5 py-3 text-right">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400">Pending</span>
-                      </td>
-                    </tr>
-                    <tr class="hover:bg-[#fdfbf7] dark:hover:bg-slate-800/30 transition-colors">
-                      <td class="px-5 py-3 font-medium text-[#1e293b] dark:text-[#f8fafc]">#TR-8839</td>
-                      <td class="px-5 py-3">Jenny Wilson</td>
-                      <td class="px-5 py-3">Oct 23, 2023</td>
-                      <td class="px-5 py-3">Clean Code</td>
-                      <td class="px-5 py-3 text-right font-semibold text-[#1e293b] dark:text-[#f8fafc]">$38.00</td>
-                      <td class="px-5 py-3 text-right">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">Completed</span>
-                      </td>
-                    </tr>
-                    <tr class="hover:bg-[#fdfbf7] dark:hover:bg-slate-800/30 transition-colors">
-                      <td class="px-5 py-3 font-medium text-[#1e293b] dark:text-[#f8fafc]">#TR-8838</td>
-                      <td class="px-5 py-3">Albert Flores</td>
-                      <td class="px-5 py-3">Oct 22, 2023</td>
-                      <td class="px-5 py-3">Introduction to Algorithms</td>
-                      <td class="px-5 py-3 text-right font-semibold text-[#1e293b] dark:text-[#f8fafc]">$85.00</td>
-                      <td class="px-5 py-3 text-right">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400">Failed</span>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-
+        <div id="personnelContainer" class="hidden bg-white dark:bg-[#1a2230] rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-xl">
+           <table class="w-full text-left text-sm text-slate-400">
+              <thead class="bg-slate-50 dark:bg-slate-900/50 text-white font-bold uppercase text-xs border-b border-slate-800">
+                <tr>
+                  <th class="px-6 py-4">Employee Name</th>
+                  <th class="px-6 py-4">Current Role</th>
+                </tr>
+              </thead>
+              <tbody id="employeeTableBody" class="divide-y divide-slate-800"></tbody>
+           </table>
         </div>
       </div>
     </main>
   </div>
 
-  <!-- Add Staff Modal -->
-  <%- include('partials/modal-add-staff') %>
+  <div id="add-employee-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-[#1a2230] w-full max-w-lg rounded-2xl border border-slate-800 shadow-2xl overflow-hidden">
+      <div class="px-6 py-4 border-b border-slate-800 flex justify-between items-center bg-slate-900/50">
+        <h3 class="text-lg font-bold text-white">Add New Employee</h3>
+        <button onclick="closeModal('add-employee-modal')" class="text-slate-400 hover:text-white transition-colors">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <form id="addEmployeeForm" class="p-6 grid grid-cols-2 gap-4">
+        <div class="col-span-2">
+          <label class="block text-xs font-bold text-slate-500 mb-2 uppercase">Role</label>
+          <select name="role" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-sm outline-none" required>
+            <option value="admin">Admin</option>
+            <option value="superAdmin">Super Admin</option>
+          </select>
+        </div>
+        <input type="text" name="firstName" placeholder="First Name" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-sm outline-none" required>
+        <input type="text" name="lastName" placeholder="Last Name" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-sm outline-none" required>
+        <input type="email" name="email" placeholder="Email Address" class="col-span-2 w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-sm outline-none" required>
+        <input type="password" name="password" placeholder="Password" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-sm outline-none" required>
+        <input type="text" name="phone" placeholder="Phone Number" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-sm outline-none" required>
+        <div class="col-span-2 grid grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1">
+            <label class="text-[10px] font-bold text-slate-500 uppercase">DOB</label>
+            <input type="date" name="dob" class="bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-sm outline-none" required>
+          </div>
+          <div class="flex flex-col gap-1">
+            <label class="text-[10px] font-bold text-slate-500 uppercase">Gender</label>
+            <select name="gender" class="bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-sm outline-none">
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="col-span-2 bg-primary text-white py-3 rounded-xl font-bold mt-2 shadow-lg shadow-blue-500/20">Create Account</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="remove-employee-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-[#1a2230] w-full max-w-md rounded-2xl border border-slate-800 shadow-2xl">
+      <div class="px-6 py-4 border-b border-slate-800 flex justify-between items-center bg-red-900/10">
+        <h3 class="text-lg font-bold text-white">Verify Removal</h3>
+        <button onclick="closeModal('remove-employee-modal')" class="text-slate-400 hover:text-white transition-colors">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <form id="removeEmployeeForm" class="p-6 space-y-4">
+        <p class="text-sm text-slate-400">Enter employee credentials to confirm removal.</p>
+        <input type="email" name="email" placeholder="Staff Email" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-sm outline-none" required>
+        <input type="password" name="password" placeholder="Staff Password" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-sm outline-none" required>
+        <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl font-bold transition-all">Terminate Access</button>
+      </form>
+    </div>
+  </div>
 
   <script src="/js/api-service.js"></script>
-  <script src="/js/auth-service.js"></script>
-  <script src="/js/main.js"></script>
   <script>
-    // Update greeting with user's name
+    // DASHBOARD INITIALIZATION logic
     document.addEventListener('DOMContentLoaded', () => {
-      const userInfo = localStorage.getItem('user');
-      if (userInfo) {
-        try {
-          const user = JSON.parse(userInfo);
-          if (user.firstName) {
-            document.getElementById('greetingMessage').textContent = `Good Morning, ${user.firstName}!`;
-          }
-        } catch (e) {
-          console.log('Could not parse user info');
-        }
+      fetchLiveStats();
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (user?.firstName) {
+        document.getElementById('greetingMessage').textContent = `Good Morning, ${user.firstName}!`;
       }
     });
 
-    function openAddStaffModal() {
-      document.getElementById('add-staff-modal').classList.remove('hidden');
+    /**
+     * DYNAMIC STATS logic
+     * Fetches real counts from backend instead of placeholders.
+     */
+    async function fetchLiveStats() {
+      try {
+        const booksData = await apiService.getBooks(); // All books
+        const historyData = await apiService.getAllPurchases(); // All sales
+        
+        if (booksData.success && historyData.success) {
+          // Unique Books: Count distinct names to ignore duplicate inventory entries
+          const uniqueBooks = [...new Set(booksData.books.map(b => b.Bname))].length;
+          document.getElementById('statTotalBooks').textContent = uniqueBooks;
+
+          // Purchasing Customers: Count distinct User IDs in transaction history
+          const uniqueCustomers = [...new Set(historyData.purchases.map(p => p.Uid))].length;
+          document.getElementById('statTotalCustomers').textContent = uniqueCustomers;
+
+          // Actual Sales: Sum total quantity of books purchased
+          const totalSold = historyData.purchases.reduce((acc, p) => acc + p.Pquantity, 0);
+          document.getElementById('statTotalSold').textContent = totalSold;
+        }
+      } catch (err) {
+        console.error('Stats Error:', err);
+        if (err.message.includes('Forbidden')) {
+          alert("Access Denied: Log out and back in to refresh session token.");
+        }
+      }
     }
 
-    function closeAddStaffModal() {
-      document.getElementById('add-staff-modal').classList.add('hidden');
+    /**
+     * STAFF DIRECTORY logic
+     */
+    async function loadEmployees() {
+      const tbody = document.getElementById('employeeTableBody');
+      const container = document.getElementById('personnelContainer');
+      try {
+        const res = await apiService.getEmployeeDirectory();
+        tbody.innerHTML = res.employees.map(e => `
+          <tr class="hover:bg-slate-800/50 transition-colors">
+            <td class="px-6 py-4 text-white font-medium">${e.Ufirst_name} ${e.Ulast_name}</td>
+            <td class="px-6 py-4"><span class="px-2 py-1 rounded-md text-[10px] uppercase font-bold bg-blue-900/40 text-blue-300 border border-blue-500/20">${e.Urole}</span></td>
+          </tr>`).join('');
+        container.classList.remove('hidden');
+      } catch (err) { 
+        alert("Access Denied: Only Super Admins can view this list."); 
+      }
     }
 
-    document.getElementById('add-staff-modal').addEventListener('click', function(e) {
-      if (e.target === this) closeAddStaffModal();
+    /**
+     * FORM HANDLING logic
+     * Fixed ReferenceError by using correct HTML IDs.
+     */
+    document.getElementById('addEmployeeForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const data = Object.fromEntries(formData.entries());
+      try {
+        const res = await apiService.addEmployee(data);
+        alert(res.message);
+        closeModal('add-employee-modal');
+        fetchLiveStats();
+      } catch (err) { alert(err.message); }
     });
 
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') closeAddStaffModal();
+    document.getElementById('removeEmployeeForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const data = Object.fromEntries(formData.entries());
+      try {
+        const res = await apiService.removeEmployee(data);
+        alert(res.message);
+        closeModal('remove-employee-modal');
+        fetchLiveStats();
+      } catch (err) { alert(err.message); }
     });
+
+    function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
   </script>
-
 </body>
 </html>

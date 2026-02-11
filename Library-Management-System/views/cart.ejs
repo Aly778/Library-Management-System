@@ -2,217 +2,169 @@
 <html class="light dark" lang="en">
 <head>
   <%- include('partials/head', { title: 'Shopping Cart' }) %>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#3b82f6',
+            background: { light: '#f8fafc', dark: '#0f172a' }
+          }
+        }
+      }
+    }
+  </script>
 </head>
 <body class="bg-background-light dark:bg-background-dark text-[#111318] dark:text-white min-h-screen flex flex-col font-display antialiased">
 
-  <!-- Header -->
   <div class="relative flex w-full flex-col bg-white dark:bg-[#1a2130] border-b border-[#f0f2f4] dark:border-gray-800">
-    <header class="flex items-center justify-between whitespace-nowrap px-10 py-3 mx-auto w-full max-w-[1440px]">
+    <header class="flex items-center justify-between px-10 py-3 mx-auto w-full max-w-[1440px]">
       <div class="flex items-center gap-8">
-        <div class="flex items-center gap-4 text-[#111318] dark:text-white">
+        <div class="flex items-center gap-4">
           <div class="size-8 flex items-center justify-center rounded bg-primary/10 text-primary">
             <span class="material-symbols-outlined text-2xl">local_library</span>
           </div>
-          <h2 class="text-lg font-bold leading-tight tracking-[-0.015em]">Library System</h2>
-        </div>
-        <div class="flex items-center gap-9 hidden md:flex">
-          <a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">My Account</a>
+          <h2 class="text-lg font-bold">Library System</h2>
         </div>
       </div>
-      <div class="flex flex-1 justify-end gap-8 items-center">
-        <label class="flex flex-col min-w-40 !h-10 max-w-64 hidden sm:flex">
-          <div class="flex w-full flex-1 items-stretch rounded-lg h-full border border-gray-200 dark:border-gray-700 bg-[#f0f2f4] dark:bg-gray-800 overflow-hidden">
-            <div class="text-[#616f89] dark:text-gray-400 flex items-center justify-center pl-4 pr-2">
-              <span class="material-symbols-outlined text-[20px]">search</span>
-            </div>
-            <input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg bg-transparent text-[#111318] dark:text-white focus:outline-0 focus:ring-0 border-none h-full placeholder:text-[#616f89] dark:placeholder:text-gray-500 px-0 text-sm font-normal leading-normal" placeholder="Search books..." value=""/>
-          </div>
-        </label>
-        <div class="flex items-center gap-4">
-          <button class="flex items-center justify-center rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-blue-700 transition-colors">
-            <span class="truncate">Sign Out</span>
-          </button>
-          <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border border-gray-200 dark:border-gray-700" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCI2tB5MDFDI0Gv3J9DRsg-KUgHYlUYYVxks2u8O7icFa2L5VcPBb3PwZtpB8snJ8sqMIkwzbihHOOup3n6GD7UMofvLNJcyYg3hI1UIQFW2tdjtnm5iL3MAldENvyimA51nudDvh0G9rz1GPQyjgN8qlPXS6M3pc_CH9uFYKNeqb2RbYzN4xmi1D5dpyPKU2sZuXUDXpbnfpCFi5-zhKfyGOxiqoS7JvhJPQrb8r-gWV-6rcAocS0-aYMdtp0EU1RqHseAzXARtLI");'></div>
-        </div>
+      <div class="flex items-center gap-4">
+        <a href="/catalog" class="text-sm font-medium hover:text-primary transition-colors">Back to Marketplace</a>
       </div>
     </header>
   </div>
 
-  <!-- Main Content -->
   <main class="flex-grow w-full max-w-[1440px] mx-auto px-6 py-8">
-    <!-- Breadcrumb -->
     <div class="flex flex-wrap gap-2 mb-8 items-center">
-      <a class="text-[#616f89] dark:text-gray-400 text-sm font-medium leading-normal hover:text-primary hover:underline" href="/">Home</a>
-      <span class="text-[#616f89] dark:text-gray-600 text-sm font-medium leading-normal">/</span>
-      <a class="text-[#616f89] dark:text-gray-400 text-sm font-medium leading-normal hover:text-primary hover:underline" href="/catalog">Catalog</a>
-      <span class="text-[#616f89] dark:text-gray-600 text-sm font-medium leading-normal">/</span>
-      <span class="text-[#111318] dark:text-white text-sm font-semibold leading-normal">Cart</span>
+      <a class="text-[#616f89] dark:text-gray-400 text-sm font-medium hover:text-primary hover:underline" href="/catalog">Catalog</a>
+      <span class="text-[#616f89] dark:text-gray-600 text-sm font-medium">/</span>
+      <span class="text-[#111318] dark:text-white text-sm font-semibold">Cart</span>
     </div>
 
-    <!-- Page Header -->
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
       <div>
-        <h1 class="text-[#111318] dark:text-white text-4xl font-black leading-tight tracking-[-0.033em]">Shopping Cart</h1>
+        <h1 class="text-[#111318] dark:text-white text-4xl font-black">Shopping Cart</h1>
         <p class="text-[#616f89] dark:text-gray-400 text-base font-normal mt-1">Review your selected items before checking out.</p>
       </div>
-      <a class="text-primary font-medium hover:underline flex items-center gap-1 group" href="/catalog">
-        <span class="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform">arrow_back</span>
-        Continue Shopping
-      </a>
     </div>
 
-    <!-- Cart Content -->
     <div class="flex flex-col lg:flex-row gap-8">
-      <!-- Cart Items -->
-      <div class="flex-1 flex flex-col gap-4">
-
-        <!-- Item: The Great Gatsby -->
-        <div class="flex flex-col sm:flex-row gap-4 bg-white dark:bg-[#1a2130] p-4 rounded-xl border border-[#f0f2f4] dark:border-gray-800 shadow-sm">
-          <div class="shrink-0">
-            <div class="bg-center bg-no-repeat bg-cover rounded-lg w-full sm:w-[100px] aspect-[2/3] sm:aspect-[3/4]" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCwYwPVGcOl2VBCOmBf0RWNhckmu3s6m6nn-7enXh_FTukl10ZbMY3D5kgR4I4t0xFTOToFR5Zg4_q2GCXzBi1DOG2B26hEpyPB9PveFhi9SzZddxs3m-a1KkXvEM8hmJz_b-nJKPoPO17xTlhZeUegQrwke0hjOYPjwSfRFZAUlWOUPCycAzGbzKF8OeSaaI9GpCkbmp6UI2ijE6YXwv5p2NyHWmaQDYVqEfMFLK4J6omFAZrSXVht6JE15i6SlZgO3O_kDJxEFWU");'></div>
-          </div>
-          <div class="flex flex-1 flex-col justify-between">
-            <div class="flex justify-between items-start gap-4">
-              <div>
-                <h3 class="text-[#111318] dark:text-white text-lg font-bold leading-normal">The Great Gatsby</h3>
-                <p class="text-[#616f89] dark:text-gray-400 text-sm font-medium">F. Scott Fitzgerald</p>
-                <div class="mt-2 flex items-center gap-2">
-                  <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">In Stock</span>
-                </div>
-              </div>
-              <p class="text-[#111318] dark:text-white text-lg font-bold">$12.99</p>
-            </div>
-            <div class="flex justify-between items-end mt-4 sm:mt-0">
-              <div class="flex items-center gap-3">
-                <span class="text-sm font-medium text-gray-500 dark:text-gray-400">Qty:</span>
-                <div class="flex items-center border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-                  <button class="w-8 h-8 flex items-center justify-center bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 transition-colors">
-                    <span class="material-symbols-outlined text-sm">remove</span>
-                  </button>
-                  <input class="w-10 h-8 text-center border-none bg-white dark:bg-[#1a2130] text-sm font-medium focus:ring-0 p-0 text-[#111318] dark:text-white" readonly type="text" value="1"/>
-                  <button class="w-8 h-8 flex items-center justify-center bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 transition-colors">
-                    <span class="material-symbols-outlined text-sm">add</span>
-                  </button>
-                </div>
-              </div>
-              <button class="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 text-sm font-medium flex items-center gap-1 transition-colors">
-                <span class="material-symbols-outlined text-[18px]">delete</span> Remove
-              </button>
-            </div>
-          </div>
+      <div id="cartItemsContainer" class="flex-1 flex flex-col gap-4">
         </div>
 
-        <!-- Item: To Kill a Mockingbird -->
-        <div class="flex flex-col sm:flex-row gap-4 bg-white dark:bg-[#1a2130] p-4 rounded-xl border border-[#f0f2f4] dark:border-gray-800 shadow-sm">
-          <div class="shrink-0">
-            <div class="bg-center bg-no-repeat bg-cover rounded-lg w-full sm:w-[100px] aspect-[2/3] sm:aspect-[3/4]" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA78BRUoxoUJ_DUMtX0I5824h7dINCEi01mnVoWGLtWbuU4AVh5gBIL-6sYBE47NrnKa5wyd6GsN-t776DJouXoNid_tchYh-jA6FfzP4eL4Rnf5Rqck_T18DpqnQNBBYS5syYHkQNtYNOIyKSig0bjW53BMeuUhamDebUvTBfvVbb66ZxKu93ZSwWSS_U2T5hlWgvrBOUQuOD9CJpmLaPR9WzdfLcVBpb95NMb1XiiaWOfI3Xg100xawsa8QWXgLBcvs_8o_kZEgM");'></div>
-          </div>
-          <div class="flex flex-1 flex-col justify-between">
-            <div class="flex justify-between items-start gap-4">
-              <div>
-                <h3 class="text-[#111318] dark:text-white text-lg font-bold leading-normal">To Kill a Mockingbird</h3>
-                <p class="text-[#616f89] dark:text-gray-400 text-sm font-medium">Harper Lee</p>
-                <div class="mt-2 flex items-center gap-2">
-                  <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">In Stock</span>
-                </div>
-              </div>
-              <p class="text-[#111318] dark:text-white text-lg font-bold">$14.50</p>
-            </div>
-            <div class="flex justify-between items-end mt-4 sm:mt-0">
-              <div class="flex items-center gap-3">
-                <span class="text-sm font-medium text-gray-500 dark:text-gray-400">Qty:</span>
-                <div class="flex items-center border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-                  <button class="w-8 h-8 flex items-center justify-center bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 transition-colors">
-                    <span class="material-symbols-outlined text-sm">remove</span>
-                  </button>
-                  <input class="w-10 h-8 text-center border-none bg-white dark:bg-[#1a2130] text-sm font-medium focus:ring-0 p-0 text-[#111318] dark:text-white" readonly type="text" value="2"/>
-                  <button class="w-8 h-8 flex items-center justify-center bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 transition-colors">
-                    <span class="material-symbols-outlined text-sm">add</span>
-                  </button>
-                </div>
-              </div>
-              <button class="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 text-sm font-medium flex items-center gap-1 transition-colors">
-                <span class="material-symbols-outlined text-[18px]">delete</span> Remove
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Item: 1984 -->
-        <div class="flex flex-col sm:flex-row gap-4 bg-white dark:bg-[#1a2130] p-4 rounded-xl border border-[#f0f2f4] dark:border-gray-800 shadow-sm">
-          <div class="shrink-0">
-            <div class="bg-center bg-no-repeat bg-cover rounded-lg w-full sm:w-[100px] aspect-[2/3] sm:aspect-[3/4]" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDmMG2tlq4S6hh072N57MUTTtBenS2NG34VVIBVdr4POXdJzCevaQEGNtu2vNOQuuq89HIrtg7BLN13HZsxRQkcvjr1K1eIZSg_s96jZV3dv2xkCrwCYEGjC9yffdUihF00vzYI_3wgl3hTkvEsynq7AXlgzUmASqjpFoA-jyR5j4JZV076XOxDJGdTiEWOKT69krt8hpYX6t5mRHAOpSdTjtCsrnSYXdhU_z89Nx2NH6xhhonpnXgsl4RQdERxKV6l3rtGew7zd-4");'></div>
-          </div>
-          <div class="flex flex-1 flex-col justify-between">
-            <div class="flex justify-between items-start gap-4">
-              <div>
-                <h3 class="text-[#111318] dark:text-white text-lg font-bold leading-normal">1984</h3>
-                <p class="text-[#616f89] dark:text-gray-400 text-sm font-medium">George Orwell</p>
-                <div class="mt-2 flex items-center gap-2">
-                  <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">Low Stock</span>
-                </div>
-              </div>
-              <p class="text-[#111318] dark:text-white text-lg font-bold">$11.25</p>
-            </div>
-            <div class="flex justify-between items-end mt-4 sm:mt-0">
-              <div class="flex items-center gap-3">
-                <span class="text-sm font-medium text-gray-500 dark:text-gray-400">Qty:</span>
-                <div class="flex items-center border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-                  <button class="w-8 h-8 flex items-center justify-center bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 transition-colors">
-                    <span class="material-symbols-outlined text-sm">remove</span>
-                  </button>
-                  <input class="w-10 h-8 text-center border-none bg-white dark:bg-[#1a2130] text-sm font-medium focus:ring-0 p-0 text-[#111318] dark:text-white" readonly type="text" value="1"/>
-                  <button class="w-8 h-8 flex items-center justify-center bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 transition-colors">
-                    <span class="material-symbols-outlined text-sm">add</span>
-                  </button>
-                </div>
-              </div>
-              <button class="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 text-sm font-medium flex items-center gap-1 transition-colors">
-                <span class="material-symbols-outlined text-[18px]">delete</span> Remove
-              </button>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Order Summary -->
       <div class="lg:w-[380px] shrink-0">
         <div class="bg-white dark:bg-[#1a2130] rounded-xl border border-[#f0f2f4] dark:border-gray-800 shadow-sm p-6 lg:sticky lg:top-8">
           <h3 class="text-[#111318] dark:text-white text-xl font-bold mb-6">Order Summary</h3>
           <div class="space-y-4 mb-6 border-b border-[#f0f2f4] dark:border-gray-800 pb-6">
             <div class="flex justify-between text-[#616f89] dark:text-gray-400">
-              <span>Subtotal (4 items)</span>
-              <span class="font-medium text-[#111318] dark:text-white">$53.24</span>
+              <span id="itemCountLabel">Subtotal (0 items)</span>
+              <span id="subtotalAmount" class="font-medium text-[#111318] dark:text-white">0.00 EGP</span>
             </div>
           </div>
           <div class="flex justify-between items-center mb-6">
             <span class="text-lg font-bold text-[#111318] dark:text-white">Total</span>
-            <span class="text-2xl font-black text-[#111318] dark:text-white">$53.24</span>
+            <span id="totalAmount" class="text-2xl font-black text-[#111318] dark:text-white">0.00 EGP</span>
           </div>
-          <button class="w-full flex items-center justify-center rounded-lg h-12 px-4 bg-primary text-white text-base font-bold leading-normal hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/20">
+          <button onclick="handleCheckout()" class="w-full flex items-center justify-center rounded-lg h-12 px-4 bg-primary text-white text-base font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/20">
             Proceed to Checkout
           </button>
-          <div class="mt-6 flex flex-col gap-3">
-            <div class="flex items-center gap-3 p-3 bg-background-light dark:bg-gray-800 rounded-lg">
-              <span class="material-symbols-outlined text-primary">verified_user</span>
-              <div>
-                <p class="text-xs font-bold text-[#111318] dark:text-white">Secure Checkout</p>
-                <p class="text-xs text-[#616f89] dark:text-gray-400">SSL Encrypted Transaction</p>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>
   </main>
 
-  <!-- Footer -->
   <footer class="mt-auto border-t border-[#f0f2f4] dark:border-gray-800 bg-white dark:bg-[#1a2130] py-8">
     <div class="max-w-[1440px] mx-auto px-10 text-center text-[#616f89] dark:text-gray-500 text-sm">
-      &copy; <%= new Date().getFullYear() %> Library System. All rights reserved.
+      © <%= new Date().getFullYear() %> City Library System. All rights reserved.
     </div>
   </footer>
 
+  <script src="/js/api-service.js"></script>
+  <script src="/js/cart-service.js"></script>
+  <script>
+    function renderCart() {
+      const container = document.getElementById('cartItemsContainer');
+      const items = cartService.getItems(); // [cite: 87]
+
+      if (items.length === 0) {
+        container.innerHTML = `
+          <div class="flex flex-col items-center justify-center py-20 bg-white dark:bg-[#1a2130] rounded-xl border border-dashed border-gray-300 dark:border-gray-700">
+            <span class="material-symbols-outlined text-6xl text-gray-300 mb-4">shopping_cart_off</span>
+            <p class="text-gray-500 dark:text-gray-400 text-lg font-medium">Your cart is empty</p>
+            <a href="/catalog" class="mt-4 text-primary font-bold hover:underline">Explore Marketplace</a>
+          </div>
+        `;
+        updateSummary(0, 0);
+        return;
+      }
+
+      container.innerHTML = items.map(item => `
+        <div class="flex flex-col sm:flex-row gap-4 bg-white dark:bg-[#1a2130] p-4 rounded-xl border border-[#f0f2f4] dark:border-gray-800 shadow-sm">
+          <div class="shrink-0">
+            <img src="${item.Bimage}" class="rounded-lg w-full sm:w-[100px] aspect-[3/4] object-cover" onerror="this.src='https://via.placeholder.com/150x200?text=No+Cover'">
+          </div>
+          <div class="flex flex-1 flex-col justify-between">
+            <div class="flex justify-between items-start">
+              <div>
+                <h3 class="text-[#111318] dark:text-white text-lg font-bold">${item.Bname}</h3>
+                <p class="text-primary font-bold text-lg mt-1">${item.Bprice} EGP</p>
+              </div>
+            </div>
+            <div class="flex justify-between items-end mt-4">
+              <div class="flex items-center gap-3">
+                <span class="text-sm font-medium text-gray-500">Qty:</span>
+                <div class="flex items-center border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+                  <button onclick="updateQty(${item.Bid}, ${item.quantity - 1})" class="w-8 h-8 flex items-center justify-center bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 transition-colors">-</button>
+                  <span class="w-10 text-center text-sm font-bold text-[#111318] dark:text-white">${item.quantity}</span>
+                  <button onclick="updateQty(${item.Bid}, ${item.quantity + 1})" class="w-8 h-8 flex items-center justify-center bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 transition-colors">+</button>
+                </div>
+              </div>
+              <button onclick="removeItem(${item.Bid})" class="text-red-600 hover:text-red-700 text-sm font-medium flex items-center gap-1 transition-colors">
+                <span class="material-symbols-outlined text-[18px]">delete</span> Remove
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      updateSummary(cartService.getTotal(), cartService.getItemCount()); // [cite: 87]
+    }
+
+    function updateSummary(total, count) {
+      document.getElementById('itemCountLabel').textContent = `Subtotal (${count} items)`;
+      document.getElementById('subtotalAmount').textContent = `${total.toFixed(2)} EGP`;
+      document.getElementById('totalAmount').textContent = `${total.toFixed(2)} EGP`;
+    }
+
+    function updateQty(id, newQty) {
+      if (newQty < 1) return;
+      cartService.updateQuantity(id, newQty); // [cite: 87]
+      renderCart();
+    }
+
+    function removeItem(id) {
+      cartService.removeItem(id); // [cite: 87]
+      renderCart();
+    }
+
+    async function handleCheckout() {
+      const items = cartService.getItems(); // [cite: 87]
+      if (items.length === 0) return;
+
+      try {
+        const response = await apiService.purchaseBooks(items); //
+        if (response.success) {
+          cartService.clear(); // [cite: 87]
+          alert('Purchase completed successfully! Your books are ready.');
+          window.location.href = '/history';
+        }
+      } catch (error) {
+        alert('Checkout failed: ' + error.message);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', renderCart);
+  </script>
 </body>
 </html>

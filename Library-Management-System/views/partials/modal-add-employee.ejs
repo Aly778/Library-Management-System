@@ -1,0 +1,55 @@
+<div id="add-employee-modal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+  <div class="bg-[#1e293b] w-full max-w-lg rounded-xl border border-[#334155] shadow-2xl overflow-hidden">
+    <div class="px-6 py-4 border-b border-[#334155] flex justify-between items-center bg-slate-800/50">
+      <h3 class="text-lg font-bold text-white">Hire New Personnel</h3>
+      <button onclick="closeModal('add-employee-modal')" class="text-slate-400 hover:text-white transition-colors">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <form id="addEmployeeForm" class="p-6 grid grid-cols-2 gap-4">
+      <div class="col-span-2 space-y-1">
+        <label class="block text-xs font-bold text-[#94a3b8] uppercase">System Role</label>
+        <select id="staff-role" name="role" class="w-full bg-[#0f172a] border border-[#334155] rounded-lg p-3 text-white text-sm focus:border-primary outline-none" required>
+          <option value="admin">Administrator</option>
+          <option value="superAdmin">Super Admin</option>
+        </select>
+      </div>
+      <div class="space-y-1">
+        <label class="block text-xs font-bold text-[#94a3b8] uppercase">First Name</label>
+        <input type="text" name="firstName" class="w-full bg-[#0f172a] border border-[#334155] rounded-lg p-3 text-white text-sm focus:border-primary outline-none" required>
+      </div>
+      <div class="space-y-1">
+        <label class="block text-xs font-bold text-[#94a3b8] uppercase">Last Name</label>
+        <input type="text" name="lastName" class="w-full bg-[#0f172a] border border-[#334155] rounded-lg p-3 text-white text-sm focus:border-primary outline-none" required>
+      </div>
+      <div class="col-span-2 space-y-1">
+        <label class="block text-xs font-bold text-[#94a3b8] uppercase">Email Address</label>
+        <input type="email" name="email" class="w-full bg-[#0f172a] border border-[#334155] rounded-lg p-3 text-white text-sm focus:border-primary outline-none" required>
+      </div>
+      <div class="space-y-1">
+        <label class="block text-xs font-bold text-[#94a3b8] uppercase">Password</label>
+        <input type="password" name="password" class="w-full bg-[#0f172a] border border-[#334155] rounded-lg p-3 text-white text-sm focus:border-primary outline-none" required>
+      </div>
+      <div class="space-y-1">
+        <label class="block text-xs font-bold text-[#94a3b8] uppercase">Phone</label>
+        <input type="text" name="phone" class="w-full bg-[#0f172a] border border-[#334155] rounded-lg p-3 text-white text-sm focus:border-primary outline-none" required>
+      </div>
+      <div class="space-y-1">
+        <label class="block text-xs font-bold text-[#94a3b8] uppercase">Date of Birth</label>
+        <input type="date" name="dob" class="w-full bg-[#0f172a] border border-[#334155] rounded-lg p-3 text-white text-sm focus:border-primary outline-none" required>
+      </div>
+      <div class="space-y-1">
+        <label class="block text-xs font-bold text-[#94a3b8] uppercase">Gender</label>
+        <select name="gender" class="w-full bg-[#0f172a] border border-[#334155] rounded-lg p-3 text-white text-sm focus:border-primary outline-none">
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+      </div>
+      <div class="col-span-2 pt-4">
+        <button type="submit" class="w-full bg-[#1e3a8a] hover:bg-blue-700 text-white py-3 rounded-lg font-bold transition-all shadow-lg shadow-blue-500/20">
+          Confirm Hire
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

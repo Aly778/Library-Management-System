@@ -1,4 +1,3 @@
-// Catalog/Books Display Script
 class CatalogManager {
   constructor() {
     this.books = [];
@@ -15,7 +14,7 @@ class CatalogManager {
         return this.books;
       }
     } catch (error) {
-      showError('Failed to load books: ' + error.message);
+      if (typeof showError === 'function') showError('Failed to load books: ' + error.message);
       return [];
     }
   }
@@ -28,7 +27,7 @@ class CatalogManager {
         return this.categories;
       }
     } catch (error) {
-      showError('Failed to load categories');
+      if (typeof showError === 'function') console.error('Failed to load categories');
       return [];
     }
   }
@@ -37,7 +36,15 @@ class CatalogManager {
     if (!categoryId) {
       this.filteredBooks = this.books;
     } else {
-      this.filteredBooks = this.books.filter(b => b.Cid == categoryId);
+      // Find all sub-categories that have this category as a parent
+      const subCategoryIds = this.categories
+        .filter(c => c.Cparent_id == categoryId)
+        .map(c => c.Cid);
+
+      // Filter books matching the selected ID OR any of its sub-categories
+      this.filteredBooks = this.books.filter(b => 
+        b.Cid == categoryId || subCategoryIds.includes(b.Cid)
+      );
     }
     return this.filteredBooks;
   }
@@ -55,64 +62,49 @@ class CatalogManager {
     return this.filteredBooks;
   }
 
-  filterByPrice(minPrice, maxPrice) {
-    this.filteredBooks = this.books.filter(b => 
-      b.Bprice >= minPrice && b.Bprice <= maxPrice
-    );
-    return this.filteredBooks;
-  }
+  renderBookCard(book) {
+    const isAvailable = book.Bquantity > 0;
+    const safeName = book.Bname.replace(/'/g, "\\'");
+    const safeImage = book.Bimage ? book.Bimage.replace(/'/g, "\\'") : '';
 
-  getBook(bookId) {
-    return this.books.find(b => b.Bid == bookId);
-  }
+    return `
+      <div class="bg-white dark:bg-[#1a2230] rounded-2xl shadow-sm hover:shadow-xl border border-slate-200 dark:border-slate-800 transition-all duration-300 overflow-hidden flex flex-col h-full">
+        <div class="aspect-[3/4] overflow-hidden relative bg-slate-100 dark:bg-slate-950">
+          ${book.Bimage ? 
+            `<img src="${book.Bimage}" alt="${book.Bname}" class="w-full h-full object-cover">` : 
+            `<div class="w-full h-full flex flex-col items-center justify-center text-slate-400">
+               <span class="material-symbols-outlined text-5xl">menu_book</span>
+               <span class="text-xs mt-1 font-medium">No Image</span>
+             </div>`
+          }
+        </div>
 
- renderBookCard(book) {
-  const isAvailable = book.Bquantity > 0;
-  
-  // Clean the title for JavaScript usage (handles apostrophes in names like Harry Potter)
-  const safeName = book.Bname.replace(/'/g, "\\'");
-  const safeImage = book.Bimage ? book.Bimage.replace(/'/g, "\\'") : '';
+        <div class="p-5 flex flex-col flex-1">
+          <div class="mb-4">
+            <h3 class="font-bold text-lg text-slate-900 dark:text-white truncate mb-1">${book.Bname}</h3>
+            <p class="text-sm font-medium text-primary">${book.BAuthor || 'Unknown Author'}</p>
+          </div>
+          
+          <div class="mt-auto">
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-xl font-black text-slate-900 dark:text-white">${book.Bprice} EGP</span>
+              <span class="text-xs text-slate-400 font-medium">${book.Bquantity} left</span>
+            </div>
 
-  return `
-    <div class="bg-white dark:bg-slate-900 rounded-lg shadow-md hover:shadow-lg transition-shadow p-4">
-      <div class="aspect-square bg-gray-200 dark:bg-slate-800 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
-        ${book.Bimage ? 
-          `<img src="${book.Bimage}" alt="${book.Bname}" class="w-full h-full object-cover">` : 
-          '<span class="material-symbols-outlined text-5xl text-gray-400">menu_book</span>'
-        }
+            ${isAvailable ? `
+              <button onclick="cartService.addItem(${book.Bid}, {Bname: '${safeName}', Bprice: ${book.Bprice}, Bimage: '${safeImage}'}); if(typeof showSuccess === 'function') showSuccess('Added to cart!');" 
+                class="w-full px-4 py-3 rounded-xl bg-primary hover:bg-blue-600 text-white font-bold text-sm shadow-lg shadow-blue-500/30 transition-all active:scale-95">
+                Add to Cart
+              </button>
+            ` : `
+              <button disabled class="w-full px-4 py-3 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-400 font-bold text-sm cursor-not-allowed">
+                Out of Stock
+              </button>
+            `}
+          </div>
+        </div>
       </div>
-      <h3 class="font-bold text-lg text-slate-900 dark:text-white truncate">${book.Bname}</h3>
-      <p class="text-sm text-slate-600 dark:text-slate-400 mb-2">${book.BAuthor || 'Unknown Author'}</p>
-      <p class="text-sm text-slate-600 dark:text-slate-400 mb-3 line-clamp-2">${book.Bdescription || 'No description'}</p>
-      
-      <div class="flex justify-between items-center mb-3">
-        <span class="text-lg font-bold text-primary">$${book.Bprice}</span>
-        <span class="text-xs ${isAvailable ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}">
-          ${isAvailable ? `${book.Bquantity} in stock` : 'Out of stock'}
-        </span>
-      </div>
-
-      <div class="flex gap-2">
-        <button onclick="catalogManager.viewDetails(${book.Bid})" class="flex-1 bg-primary hover:bg-blue-700 text-white py-2 px-3 rounded text-sm transition-colors">
-          View
-        </button>
-        ${isAvailable ? `
-          <button onclick="cartService.addItem(${book.Bid}, {Bname: '${safeName}', Bprice: ${book.Bprice}, Bimage: '${safeImage}'}); showSuccess('Added to cart!');" 
-                  class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 px-3 rounded text-sm transition-colors">
-            Cart
-          </button>
-        ` : ''}
-      </div>
-    </div>
-  `;
-}
-  viewDetails(bookId) {
-    const book = this.getBook(bookId);
-    if (book) {
-      // Store for detail view
-      sessionStorage.setItem('selectedBook', JSON.stringify(book));
-      window.location.href = `/catalog?book=${bookId}`;
-    }
+    `;
   }
 }
 

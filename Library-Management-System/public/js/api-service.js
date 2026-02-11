@@ -101,8 +101,31 @@ class ApiService {
     });
   }
 
+  async addEmployee(employeeData) {
+    return this.request('/superadmin/add-employee', {
+      method: 'POST',
+      body: JSON.stringify(employeeData)
+    });
+  }
+
+  async removeEmployee(credentials) {
+    return this.request('/superadmin/remove-employee', {
+      method: 'POST',
+      body: JSON.stringify(credentials)
+    });
+  }
+
+  async getEmployeeDirectory() {
+    return this.request('/superadmin/employees', { method: 'GET' });
+  }
+  
   async returnBook(borrowId) {
     return this.request(`/customer/return/${borrowId}`, { method: 'POST' });
+  }
+
+  async getAllPurchases() {
+    // Ensure the path matches your backend mounting (e.g., /api/superadmin/purchases/all)
+    return this.request('/superadmin/purchases/all', { method: 'GET' });
   }
 
   async purchaseBooks(items) {

@@ -102,9 +102,12 @@ INSERT INTO Books (Cid, Bname, Bprice, Bpages, Bpublish_date, Bquantity, Btotal_
 (1, 'The Shining', 150, 447, '1977-01-28', 5, 10, 'A classic horror novel about a haunted hotel', 'https://img1.od-cdn.com/ImageType-100/1191-1/%7B970AE6F8-8A83-4D0B-BD99-1907DBF12645%7DIMG100.JPG', 'Stephen King'),
 (1, 'Harry Potter and the Sorcerer''s Stone', 100, 309, '1997-06-26', 8, 15, 'The first book in the Harry Potter series', 'https://img1.od-cdn.com/ImageType-400/3450-1/%7B622708F6-78D7-453A-A7C5-3FE6853F3167%7DIMG400.JPG', 'J.K. Rowling');
 
-UPDATE Users SET Urole = 'superAdmin' WHERE Uemail = 'Kylie@example.com';
+# UPDATE Users SET Urole = 'superAdmin' WHERE Uemail = 'Kylie@example.com';
 
-SELECT * FROM library_system.Users;
+# SELECT * FROM library_system.Users;
+
+# update library_system.Books SET Bquantity = 3 WHERE Bid = 1;
+# SELECT * FROM  library_system.Books WHERE Bid = 1;
 /*
 SET FOREIGN_KEY_CHECKS = 0;
 TRUNCATE TABLE Users;
@@ -114,4 +117,4 @@ SET FOREIGN_KEY_CHECKS = 1;
 
 #Alter table Users Modify Uphone_number bigint;
 
-UPDATE Users SET Urole = 'superAdmin' WHERE Uemail = 'sama@tester.com';
+#UPDATE Users SET Urole = 'superAdmin' WHERE Uemail = 'Marwa@Mamdouh.com';

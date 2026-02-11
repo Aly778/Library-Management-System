@@ -18,30 +18,36 @@ class Book {
 
   static async findAll(filters = {}) {
     try {
-      let query = 'SELECT * FROM Books WHERE 1=1';
+      // FIXED: Corrected string termination and removed premature semicolon
+      let query = `
+        SELECT b.*, c.Cname as category_name 
+        FROM Books b 
+        LEFT JOIN Categories c ON b.Cid = c.Cid 
+        WHERE 1=1
+      `;
       const params = [];
 
       if (filters.category) {
-        query += ' AND Cid = ?';
+        query += ' AND b.Cid = ?';
         params.push(filters.category);
       }
 
       if (filters.search) {
-        query += ' AND (Bname LIKE ? OR BAuthor LIKE ?)';
+        query += ' AND (b.Bname LIKE ? OR b.BAuthor LIKE ?)';
         params.push(`%${filters.search}%`, `%${filters.search}%`);
       }
 
       if (filters.minPrice !== undefined) {
-        query += ' AND Bprice >= ?';
+        query += ' AND b.Bprice >= ?';
         params.push(filters.minPrice);
       }
 
       if (filters.maxPrice !== undefined) {
-        query += ' AND Bprice <= ?';
+        query += ' AND b.Bprice <= ?';
         params.push(filters.maxPrice);
       }
 
-      query += ' ORDER BY Bname ASC';
+      query += ' ORDER BY b.Bname ASC';
 
       const [books] = await db.execute(query, params);
       return books;

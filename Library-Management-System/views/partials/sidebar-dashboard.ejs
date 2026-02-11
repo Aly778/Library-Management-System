@@ -1,6 +1,5 @@
 <aside class="w-64 flex-shrink-0 border-r border-[#e2e8f0] dark:border-[#334155] bg-white dark:bg-[#1e293b] flex flex-col justify-between">
   <div class="flex flex-col gap-6 p-4">
-    <!-- Logo -->
     <div class="flex items-center gap-3 px-2">
       <div class="flex items-center justify-center rounded-lg bg-[#1e3a8a] text-white size-10 shadow-md">
         <span class="material-symbols-outlined">local_library</span>
@@ -11,7 +10,6 @@
       </div>
     </div>
 
-    <!-- Navigation -->
     <nav class="flex flex-col gap-1">
       <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-[#1e3a8a]/10 text-[#1e3a8a] dark:bg-[#1e3a8a]/20 dark:text-blue-300 group" href="/dashboard">
         <span class="material-symbols-outlined text-[24px]">dashboard</span>
@@ -24,7 +22,6 @@
     </nav>
   </div>
 
-  <!-- Bottom Section -->
   <div class="p-4 border-t border-[#e2e8f0] dark:border-[#334155]">
     <div class="flex items-center gap-3 px-3 py-2 justify-between">
       <div class="flex items-center gap-3 overflow-hidden flex-1">
@@ -42,14 +39,31 @@
 </aside>
 
 <script>
-// Update sidebar with user info from localStorage
+/**
+ * Global Logout Function 
+ * Ensures session data is wiped and the user is redirected to the login page.
+ */
+window.handleLogout = function() {
+  // Clear all session storage
+  localStorage.removeItem('authToken');
+  localStorage.removeItem('user');
+  
+  // Also clear cart to prevent mix-ups between users
+  localStorage.removeItem('cart');
+  
+  // Force browser to sign-in page
+  window.location.href = '/login';
+};
+
+/**
+ * Sidebar Initialization 
+ * Pulls the logged-in user's name from localStorage and displays it.
+ */
 document.addEventListener('DOMContentLoaded', () => {
   const userInfo = localStorage.getItem('user');
   if (userInfo) {
     try {
       const user = JSON.parse(userInfo);
-      
-      // Update first and last name
       if (user.firstName) {
         document.getElementById('sidebarFirstName').textContent = user.firstName;
       }
@@ -57,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('sidebarLastName').textContent = user.lastName;
       }
     } catch (e) {
-      console.log('Could not parse user info');
+      console.error('Sidebar: Error parsing user session info');
     }
   }
 });

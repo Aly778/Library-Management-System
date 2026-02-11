@@ -5,17 +5,11 @@
     </div>
     <h2 class="text-lg font-bold leading-tight tracking-[-0.015em]">Library System</h2>
   </div>
-  <div class="flex flex-1 justify-end gap-8">
-    <div class="hidden md:flex items-center gap-9">
-      <a class="text-slate-600 dark:text-slate-300 text-sm font-medium hover:text-primary dark:hover:text-primary transition-colors" href="/">Home</a>
-      <a class="text-slate-600 dark:text-slate-300 text-sm font-medium hover:text-primary dark:hover:text-primary transition-colors" href="#">Catalog</a>
-      <a class="text-slate-600 dark:text-slate-300 text-sm font-medium hover:text-primary dark:hover:text-primary transition-colors" href="#">Help</a>
-    </div>
-    
-    <!-- Auth Section -->
+
+  <div class="flex flex-1 justify-end gap-8 items-center">
     <div id="authLinks" class="flex items-center gap-4">
-      <!-- Default: Not logged in -->
-      <a href="/signup" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-9 px-4 bg-primary text-white text-sm font-bold hover:bg-blue-700 transition-colors">
+      <a href="/login" class="text-slate-600 dark:text-slate-300 text-sm font-medium hover:text-primary dark:hover:text-primary transition-colors">Login</a>
+      <a href="/signup" class="flex min-w-[84px] cursor-pointer items-center justify-center rounded-lg h-9 px-4 bg-primary text-white text-sm font-bold hover:bg-blue-700 transition-colors">
         <span class="truncate">Sign Up</span>
       </a>
     </div>
@@ -23,38 +17,43 @@
 </header>
 
 <script>
-// Update header when page loads
+// Update header when page loads [cite: 187]
 document.addEventListener('DOMContentLoaded', () => {
   updateHeaderUI();
 });
 
+/**
+ * FIXED HEADER UI LOGIC:
+ * Removes extra navigation links and manages dynamic login state.
+ */
 function updateHeaderUI() {
-  const isAuth = authService.isAuthenticated();
+  const isAuth = authService.isAuthenticated(); 
   const authLinks = document.getElementById('authLinks');
   
+  if (!authLinks) return;
+
   if (isAuth) {
-    // Show logged-in UI with user name and logout
-    const user = authService.getUser();
-    let userName = 'User';
+    // Show logged-in UI with user name and functional logout 
+    let userName = 'User'; 
     
-    // Try to get user name from localStorage
+    // Attempt to extract user identity from session storage [cite: 190, 191]
     const userInfo = localStorage.getItem('user');
     if (userInfo) {
       try {
         const parsedUser = JSON.parse(userInfo);
-        // Extract name from JWT if available
         const token = localStorage.getItem('authToken');
         if (token) {
           const payload = token.split('.')[1];
           const decoded = JSON.parse(atob(payload));
-          // If firstName is in decoded, use it; otherwise use a default
-          userName = decoded.firstName || 'User';
+          // Priority: Name from JWT payload, then parsed object, then default [cite: 193]
+          userName = decoded.firstName || parsedUser.firstName || 'User';
         }
       } catch (e) {
-        console.log('Could not parse user info');
+        console.error('Header: Could not parse session identity'); 
       }
     }
     
+    // Injected Logged-in State UI 
     authLinks.innerHTML = `
       <div class="flex items-center gap-3">
         <span class="text-slate-700 dark:text-slate-300 text-sm font-medium">${userName}</span>
@@ -64,13 +63,13 @@ function updateHeaderUI() {
       </div>
     `;
   } else {
-    // Show login/signup UI
+    // Show clean login/signup UI for unauthenticated users [cite: 196]
     authLinks.innerHTML = `
       <a href="/login" class="text-slate-600 dark:text-slate-300 text-sm font-medium hover:text-primary dark:hover:text-primary transition-colors">Login</a>
-      <a href="/signup" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-9 px-4 bg-primary text-white text-sm font-bold hover:bg-blue-700 transition-colors">
+      <a href="/signup" class="flex min-w-[84px] cursor-pointer items-center justify-center rounded-lg h-9 px-4 bg-primary text-white text-sm font-bold hover:bg-blue-700 transition-colors">
         <span class="truncate">Sign Up</span>
       </a>
-    `;
+    `; 
   }
 }
 </script>

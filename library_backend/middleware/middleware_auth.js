@@ -15,7 +15,9 @@ const authenticate = (req, res, next) => {
 
 const authorize = (roles) => {
     return (req, res, next) => {
-        if (!roles.includes(req.user.role.toLowerCase())) {
+        // FIXED: Convert all allowed roles to lowercase for a case-insensitive check
+        const lowerRoles = roles.map(role => role.toLowerCase());
+        if (!lowerRoles.includes(req.user.role.toLowerCase())) {
             return res.status(403).json({ message: "Forbidden: Access denied" });
         }
         next();

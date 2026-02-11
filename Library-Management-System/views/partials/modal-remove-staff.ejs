@@ -1,0 +1,18 @@
+<div id="remove-staff-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+  <div class="w-full max-w-md bg-[#1e293b] rounded-xl border border-[#334155] shadow-2xl overflow-hidden">
+    <div class="px-6 py-4 border-b border-[#334155] flex justify-between items-center bg-red-900/10">
+      <h3 class="text-lg font-semibold text-white">Verify Staff Removal</h3>
+      <button onclick="closeRemoveStaffModal()" class="text-[#94a3b8] hover:text-white">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <form id="removeStaffForm" class="p-6 space-y-4">
+      <p class="text-sm text-[#94a3b8]">Enter the credentials of the employee you wish to remove.</p>
+      <input type="email" name="email" placeholder="Employee Email" class="w-full px-4 py-2 bg-[#0f172a] border border-[#334155] rounded-lg text-white text-sm" required>
+      <input type="password" name="password" placeholder="Employee Password" class="w-full px-4 py-2 bg-[#0f172a] border border-[#334155] rounded-lg text-white text-sm" required>
+      <button type="submit" class="w-full py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg transition-all">
+        Remove Employee
+      </button>
+    </form>
+  </div>
+</div>
